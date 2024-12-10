@@ -1,10 +1,10 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { login } from "@/actions/auth";
-import PasswordInput from "../../../components/login/PasswordInput";
+import { signup } from "@/actions/auth";
+import PasswordInput from "@/components/login/PasswordInput";
 import Link from "next/link";
 
-export default async function LoginPage() {
+export default async function SignUpPage() {
   const supabase = await createClient();
 
   const {
@@ -20,15 +20,50 @@ export default async function LoginPage() {
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-lg">
         <div className="text-center">
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            Welcome to the Omega Phi Chapter!
+            Create your account
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Please sign in to your account
+            Join the Omega Phi Chapter
           </p>
         </div>
 
         <form className="mt-8 space-y-6">
           <div className="space-y-4">
+            <div className="flex gap-4">
+              <div>
+                <label
+                  htmlFor="firstName"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  First Name
+                </label>
+                <input
+                  id="firstName"
+                  name="firstName"
+                  type="text"
+                  required
+                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  placeholder="John"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="lastName"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Last Name
+                </label>
+                <input
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  required
+                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  placeholder="Doe"
+                />
+              </div>
+            </div>
+
             <div>
               <label
                 htmlFor="email"
@@ -42,7 +77,7 @@ export default async function LoginPage() {
                 type="email"
                 required
                 className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                placeholder="Enter your email"
+                placeholder="you@example.com"
               />
             </div>
 
@@ -59,19 +94,19 @@ export default async function LoginPage() {
 
           <div className="space-y-4">
             <button
-              formAction={login}
+              formAction={signup}
               className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              Log in
+              Create Account
             </button>
 
             <p className="text-center text-sm text-gray-600">
-              Don't have an account?{" "}
+              Already have an account?{" "}
               <Link
-                href="/signup"
+                href="/login"
                 className="font-medium text-blue-600 hover:text-blue-500"
               >
-                Sign up
+                Sign in
               </Link>
             </p>
           </div>
