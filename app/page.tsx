@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-import { signOut } from "./actions";
+import { signOut } from "@/actions/auth";
 
 export default async function HomePage() {
   const supabase = await createClient();
