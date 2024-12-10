@@ -2,7 +2,6 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { login } from "@/actions/auth";
 import PasswordInput from "../../../components/login/PasswordInput";
-import Link from "next/link";
 
 export default async function LoginPage() {
   const supabase = await createClient();
@@ -64,16 +63,6 @@ export default async function LoginPage() {
             >
               Log in
             </button>
-
-            <p className="text-center text-sm text-gray-600">
-              Don't have an account?{" "}
-              <Link
-                href="/signup"
-                className="font-medium text-blue-600 hover:text-blue-500"
-              >
-                Sign up
-              </Link>
-            </p>
           </div>
         </form>
       </div>
