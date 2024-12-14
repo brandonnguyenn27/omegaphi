@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { isAdmin } from "@/utils/auth";
 import { redirect } from "next/navigation";
-import EventForm from "@/components/admin/EventForm";
+import AddEventModal from "@/components/admin/AddEventModal";
 import EventList from "@/components/admin/EventList";
 
 export default async function AdminEventsPage() {
@@ -19,8 +19,10 @@ export default async function AdminEventsPage() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Event Management</h1>
-      <EventForm />
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Event Management</h1>
+        <AddEventModal />
+      </div>
       <EventList events={events || []} />
     </div>
   );
