@@ -1,5 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
-import { signOut } from "@/actions/auth";
+import { Button } from "@/components/ui/button";
+import Header from "@/components/home/Header";
+import Link from "next/link";
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -10,12 +12,14 @@ export default async function HomePage() {
 
   return (
     <div>
-      <h1>Welcome to the Home Page</h1>
-
+      <Header />
       {session ? (
-        <form action={signOut}>
-          <button>Sign Out</button>
-        </form>
+        <div>
+          <h1>Welcome to the Home Page</h1>
+          <Link href="/dashboard">
+            <Button>Dashboard</Button>
+          </Link>
+        </div>
       ) : (
         <a href="/login">Log in</a>
       )}
