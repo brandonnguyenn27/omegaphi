@@ -16,8 +16,8 @@ export default function Header() {
   const router = useRouter();
 
   return (
-    <header className="border-b">
-      <div className="px-6 flex h-16 items-center justify-between max-w-[1400px] mx-auto">
+    <header className="border-b px-8">
+      <div className="flex h-16 items-center justify-between ">
         <Link href="/" className="text-xl font-semibold">
           AKPsi Omega Phi
         </Link>
