@@ -1,14 +1,15 @@
 "use client";
 
 import { createClient } from "@/utils/supabase/client";
-import { Button } from "@/components/ui/button";
-import EditEventModal from "./EditEventModal";
+import EventCard from "./EventCard";
 
 interface Event {
   id: string;
   title: string;
   description: string;
   date: string;
+  start_time: string;
+  end_time: string;
   location: string;
 }
 
@@ -30,21 +31,7 @@ export default function EventList({ events }: { events: Event[] }) {
   return (
     <div className="space-y-4">
       {events.map((event) => (
-        <div key={event.id} className="border p-4 rounded">
-          <h3 className="font-bold">{event.title}</h3>
-          <p>{event.description}</p>
-          <p>Date: {new Date(event.date).toLocaleString()}</p>
-          <p>Location: {event.location}</p>
-          <div className="mt-2 space-x-2">
-            <EditEventModal event={event} />
-            <Button
-              variant="destructive"
-              onClick={() => handleDelete(event.id)}
-            >
-              Delete
-            </Button>
-          </div>
-        </div>
+        <EventCard key={event.id} event={event} onDelete={handleDelete} />
       ))}
     </div>
   );
