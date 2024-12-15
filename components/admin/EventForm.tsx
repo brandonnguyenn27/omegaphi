@@ -3,16 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
-
-interface Event {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  start_time: string;
-  end_time: string;
-  location: string;
-}
+import { Event } from "@/types/admin/types";
 
 interface EventFormProps {
   event?: Event;

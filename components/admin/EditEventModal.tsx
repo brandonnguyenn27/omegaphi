@@ -10,16 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import EventForm from "./EventForm";
-
-interface Event {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  start_time: string;
-  end_time: string;
-  location: string;
-}
+import { Event } from "@/types/admin/types";
 
 interface EditEventModalProps {
   event: Event;

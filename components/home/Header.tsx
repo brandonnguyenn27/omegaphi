@@ -11,16 +11,20 @@ import {
 import { signOut } from "@/actions/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function Header() {
   const router = useRouter();
 
   return (
-    <header className="border-b px-8">
-      <div className="flex h-16 items-center justify-between ">
-        <Link href="/" className="text-xl font-semibold">
-          AKPsi Omega Phi
-        </Link>
+    <header className="border-b w-full">
+      <div className="flex items-center h-16 px-4 justify-between">
+        <div className="flex items-center">
+          <SidebarTrigger className="mr-4" />
+          <Link href="/" className="text-xl font-semibold">
+            AKPsi Omega Phi
+          </Link>
+        </div>
 
         <DropdownMenu>
           <DropdownMenuTrigger className="focus:outline-none">

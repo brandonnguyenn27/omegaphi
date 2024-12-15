@@ -1,15 +1,6 @@
 import { Button } from "@/components/ui/button";
 import EditEventModal from "./EditEventModal";
-
-interface Event {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  start_time: string;
-  end_time: string;
-  location: string;
-}
+import { Event } from "@/types/admin/types";
 
 interface EventCardProps {
   event: Event;

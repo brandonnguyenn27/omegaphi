@@ -1,6 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
 import { Button } from "@/components/ui/button";
-import Header from "@/components/home/Header";
 import Link from "next/link";
 import { isAdmin } from "@/utils/auth";
 
@@ -14,7 +13,6 @@ export default async function HomePage() {
 
   return (
     <div>
-      <Header />
       {user ? (
         <div>
           <h1>Welcome to the Home Page</h1>
