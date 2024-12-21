@@ -7,17 +7,16 @@ export async function isAdmin(): Promise<boolean> {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user?.email) return false;
+  if (!user?.id) return false;
 
-  const { count, error } = await supabase
-    .from("admins")
-    .select("*", { count: "exact", head: true })
-    .eq("email", user.email);
+  const { data, error } = await supabase.rpc("is_admin", {
+    p_user_id: user.id,
+  });
 
   if (error) {
     console.error("Error checking admin status:", error);
     return false;
   }
 
-  return count === 1;
+  return data === true;
 }
