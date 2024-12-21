@@ -1,15 +1,10 @@
 import { createClient } from "@/utils/supabase/server";
 import { isAdmin } from "@/utils/auth";
-import { redirect } from "next/navigation";
 import AddEventModal from "@/components/admin/AddEventModal";
 import EventList from "@/components/admin/EventList";
 
 export default async function AdminEventsPage() {
   const isUserAdmin = await isAdmin();
-
-  if (!isUserAdmin) {
-    redirect("/");
-  }
 
   const supabase = await createClient();
   const { data: events } = await supabase
@@ -21,7 +16,7 @@ export default async function AdminEventsPage() {
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Event Management</h1>
-        <AddEventModal />
+        {isUserAdmin && <AddEventModal />}
       </div>
       <EventList events={events || []} />
     </div>
