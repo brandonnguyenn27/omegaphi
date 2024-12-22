@@ -61,15 +61,17 @@ function CollapsibleMenuItem({ item }: { item: SidebarItem }) {
         </SidebarMenuButton>
       </CollapsibleTrigger>
       <CollapsibleContent>
-        {item.subItem?.map((subItem) => (
-          <SidebarMenuItem key={subItem.title} className="pl-2">
-            <SidebarMenuButton asChild>
-              <a href={subItem.url}>
-                <span>{subItem.title}</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
+        <ul>
+          {item.subItem?.map((subItem) => (
+            <SidebarMenuItem key={subItem.title}>
+              <SidebarMenuButton asChild className="pl-4">
+                <a href={subItem.url}>
+                  <span>{subItem.title}</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </ul>
       </CollapsibleContent>
     </Collapsible>
   );

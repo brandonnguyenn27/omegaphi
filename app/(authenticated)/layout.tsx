@@ -30,10 +30,6 @@ const items: SidebarItem[] = [
         title: "Interviews",
         url: "/rush/interviews",
       },
-      {
-        title: "Another Route",
-        url: "/rush/another-route",
-      },
     ],
   },
 ];
