@@ -3,18 +3,8 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/ui/app-sidebar";
 
 import { HomeIcon, DashboardIcon, CalendarIcon } from "@radix-ui/react-icons";
+import { SidebarItem } from "@/types/ui/types";
 
-interface SidebarItem {
-  title: string;
-  url: string;
-  icon: React.ElementType;
-  subItem?: SidebarSubItem[];
-}
-
-interface SidebarSubItem {
-  title: string;
-  url: string;
-}
 const items: SidebarItem[] = [
   {
     title: "Home",

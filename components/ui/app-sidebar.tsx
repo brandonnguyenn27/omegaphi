@@ -15,23 +15,8 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@/components/ui/collapsible";
-import { HomeIcon, DashboardIcon, CalendarIcon } from "@radix-ui/react-icons";
-
-interface SidebarItem {
-  title: string;
-  url: string;
-  icon: React.ElementType;
-  subItem?: SidebarSubItem[];
-}
-
-interface SidebarSubItem {
-  title: string;
-  url: string;
-}
-
-interface CollapsibleMenuItemProps {
-  item: SidebarItem;
-}
+import { SidebarItem } from "@/types/ui/types";
+import { Plus } from "lucide-react";
 
 export function AppSidebar({ items = [] }: { items: SidebarItem[] }) {
   return (
@@ -71,12 +56,13 @@ function CollapsibleMenuItem({ item }: { item: SidebarItem }) {
       <CollapsibleTrigger asChild>
         <SidebarMenuButton>
           <item.icon className="h-4 w-4 mr-2" />
-          <span>{item.title}</span>
+          {item.title}
+          <Plus className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
         </SidebarMenuButton>
       </CollapsibleTrigger>
       <CollapsibleContent>
         {item.subItem?.map((subItem) => (
-          <SidebarMenuItem key={subItem.title}>
+          <SidebarMenuItem key={subItem.title} className="pl-2">
             <SidebarMenuButton asChild>
               <a href={subItem.url}>
                 <span>{subItem.title}</span>
