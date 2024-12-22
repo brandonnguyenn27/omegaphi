@@ -10,27 +10,30 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from "@/components/ui/collapsible";
 import { HomeIcon, DashboardIcon, CalendarIcon } from "@radix-ui/react-icons";
 
-const items = [
-  {
-    title: "Home",
-    url: "/",
-    icon: HomeIcon,
-  },
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: DashboardIcon,
-  },
-  {
-    title: "Events",
-    url: "/admin/events",
-    icon: CalendarIcon,
-  },
-];
+interface SidebarItem {
+  title: string;
+  url: string;
+  icon: React.ElementType;
+  subItem?: SidebarSubItem[];
+}
 
-export function AppSidebar() {
+interface SidebarSubItem {
+  title: string;
+  url: string;
+}
+
+interface CollapsibleMenuItemProps {
+  item: SidebarItem;
+}
+
+export function AppSidebar({ items = [] }: { items: SidebarItem[] }) {
   return (
     <Sidebar>
       <SidebarHeader />
@@ -41,12 +44,16 @@ export function AppSidebar() {
           <SidebarMenu>
             {items.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url}>
-                    <item.icon className="h-4 w-4 mr-2" />
-                    <span>{item.title}</span>
-                  </a>
-                </SidebarMenuButton>
+                {item.subItem ? (
+                  <CollapsibleMenuItem item={item} />
+                ) : (
+                  <SidebarMenuButton asChild>
+                    <a href={item.url}>
+                      <item.icon className="h-4 w-4 mr-2" />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                )}
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
@@ -55,5 +62,29 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter />
     </Sidebar>
+  );
+}
+
+function CollapsibleMenuItem({ item }: { item: SidebarItem }) {
+  return (
+    <Collapsible>
+      <CollapsibleTrigger asChild>
+        <SidebarMenuButton>
+          <item.icon className="h-4 w-4 mr-2" />
+          <span>{item.title}</span>
+        </SidebarMenuButton>
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        {item.subItem?.map((subItem) => (
+          <SidebarMenuItem key={subItem.title}>
+            <SidebarMenuButton asChild>
+              <a href={subItem.url}>
+                <span>{subItem.title}</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </CollapsibleContent>
+    </Collapsible>
   );
 }
