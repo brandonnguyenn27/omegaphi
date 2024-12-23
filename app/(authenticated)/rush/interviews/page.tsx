@@ -12,13 +12,10 @@ export default async function InterviewPage() {
     .select("id, interview_date")
     .order("interview_date");
 
-  console.log(dates);
-
   const { data: interviews } = await supabase
     .from("interviews")
     .select("*")
     .eq("user_id", userId);
-  console.log(interviews);
 
   return (
     <div>

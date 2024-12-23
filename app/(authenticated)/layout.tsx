@@ -34,6 +34,9 @@ const items: SidebarItem[] = [
   },
 ];
 
+const logoUrl =
+  "https://xvibzpkqqwyevevkcemr.supabase.co/storage/v1/object/sign/images/omegaphilogo.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJpbWFnZXMvb21lZ2FwaGlsb2dvLnBuZyIsImlhdCI6MTczNDkxNTE1OSwiZXhwIjoyMDUwMjc1MTU5fQ.sECOJ4JCqFkfSh8JA53JeUwLgb3-FRX-cd0LMRcZkAA";
+
 export default function WithHeaderLayout({
   children,
 }: {
@@ -44,7 +47,7 @@ export default function WithHeaderLayout({
       <div className="flex min-h-screen w-full">
         <AppSidebar items={items} />
         <div className="flex-1 w-0 min-w-0">
-          <Header />
+          <Header logoUrl={logoUrl} />
           <main className="p-6">{children}</main>
         </div>
       </div>

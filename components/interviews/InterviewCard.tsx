@@ -12,7 +12,6 @@ type InterviewCardProps = {
 };
 
 export default function InterviewCard({ interviews }: InterviewCardProps) {
-  console.log("Rendering InterviewCard with interviews:", interviews);
   if (interviews.length === 0) {
     return (
       <Card>

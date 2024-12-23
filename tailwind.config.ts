@@ -74,5 +74,6 @@ export default {
       display: ["data-state"],
     },
   },
+
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;

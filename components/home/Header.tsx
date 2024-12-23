@@ -12,8 +12,12 @@ import { signOut } from "@/actions/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import Image from "next/image";
 
-export default function Header() {
+type HeaderProps = {
+  logoUrl: string;
+};
+export default function Header({ logoUrl }: HeaderProps) {
   const router = useRouter();
 
   return (
@@ -21,8 +25,8 @@ export default function Header() {
       <div className="flex items-center h-16 px-4 justify-between">
         <div className="flex items-center">
           <SidebarTrigger className="mr-4" />
-          <Link href="/" className="text-xl font-semibold">
-            AKPsi Omega Phi
+          <Link href="/" className="text-xl font-semibold mt-1">
+            <Image src={logoUrl} alt="Logo" width={120} height={60} priority />
           </Link>
         </div>
 
