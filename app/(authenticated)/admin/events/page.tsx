@@ -18,7 +18,7 @@ export default async function AdminEventsPage() {
         <h1 className="text-2xl font-bold">Event Management</h1>
         {isUserAdmin && <AddEventModal />}
       </div>
-      <EventList events={events || []} />
+      <EventList events={events || []} isAdmin={isUserAdmin} />
     </div>
   );
 }

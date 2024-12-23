@@ -4,7 +4,12 @@ import { createClient } from "@/utils/supabase/client";
 import EventCard from "./EventCard";
 import { Event } from "@/types/admin/types";
 
-export default function EventList({ events }: { events: Event[] }) {
+interface EventListProps {
+  events: Event[];
+  isAdmin: boolean;
+}
+
+export default function EventList({ events, isAdmin }: EventListProps) {
   const supabase = createClient();
 
   const handleDelete = async (id: string) => {
@@ -22,7 +27,12 @@ export default function EventList({ events }: { events: Event[] }) {
   return (
     <div className="space-y-4">
       {events.map((event) => (
-        <EventCard key={event.id} event={event} onDelete={handleDelete} />
+        <EventCard
+          key={event.id}
+          event={event}
+          onDelete={handleDelete}
+          isAdmin={isAdmin}
+        />
       ))}
     </div>
   );

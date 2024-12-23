@@ -1,29 +1,21 @@
 import { Button } from "@/components/ui/button";
 import EditEventModal from "./EditEventModal";
 import { Event } from "@/types/admin/types";
+import { formatTime } from "@/utils/helper";
 
 interface EventCardProps {
   event: Event;
   onDelete: (id: string) => Promise<void>;
+  isAdmin: boolean;
 }
 
-export default function EventCard({ event, onDelete }: EventCardProps) {
+export default function EventCard({
+  event,
+  onDelete,
+  isAdmin,
+}: EventCardProps) {
   const eventDate = new Date(event.date);
   const formattedDate = eventDate.toLocaleDateString();
-
-  const formatTime = (timeStr: string | null | undefined) => {
-    // Return early if timeStr is null or undefined
-    if (!timeStr) return "";
-
-    const [hours, minutes] = timeStr.split(":");
-    const time = new Date();
-    time.setHours(parseInt(hours), parseInt(minutes));
-    return time.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
 
   return (
     <div className="border p-4 rounded">
@@ -34,12 +26,14 @@ export default function EventCard({ event, onDelete }: EventCardProps) {
         Time: {formatTime(event.start_time)} - {formatTime(event.end_time)}
       </p>
       <p>Location: {event.location}</p>
-      <div className="mt-2 space-x-2">
-        <EditEventModal event={event} />
-        <Button variant="destructive" onClick={() => onDelete(event.id)}>
-          Delete
-        </Button>
-      </div>
+      {isAdmin && (
+        <div className="mt-2 space-x-2">
+          <EditEventModal event={event} />
+          <Button variant="destructive" onClick={() => onDelete(event.id)}>
+            Delete
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
