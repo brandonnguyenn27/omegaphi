@@ -1,8 +1,7 @@
+"use server";
 import { createClient } from "@/utils/supabase/server";
 
 export async function addRusheeAction(formData: FormData) {
-  "use server";
-
   const supabase = await createClient();
 
   const first_name = formData.get("first_name") as string;
@@ -16,8 +15,6 @@ export async function addRusheeAction(formData: FormData) {
 }
 
 export async function deleteRusheeAction(rusheeId: string) {
-  "use server";
-
   const supabase = await createClient();
   await supabase.from("rushees").delete().eq("id", rusheeId);
 }
@@ -29,8 +26,6 @@ export async function updateRusheeAction(payload: {
   email?: string;
   phone?: string;
 }) {
-  "use server";
-
   const { id, ...fields } = payload;
 
   const supabase = await createClient();
