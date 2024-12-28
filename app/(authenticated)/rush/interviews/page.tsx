@@ -21,12 +21,14 @@ export default async function InterviewPage() {
     <div>
       <div className="flex justify-center items-center w-full">
         <Tabs defaultValue="interview1" className="w-3/4  justify-center">
-          <TabsList className="grid w-full grid-cols-2">
-            {dates?.map((date, index) => (
-              <TabsTrigger key={index} value={`interview${index + 1}`}>
-                {formatDate(date.interview_date)}
-              </TabsTrigger>
-            ))}
+          <TabsList className={`grid w-full grid-cols-${dates?.length}`}>
+            {dates?.map((date, index) => {
+              return (
+                <TabsTrigger key={index} value={`interview${index + 1}`}>
+                  {formatDate(date.interview_date)}
+                </TabsTrigger>
+              );
+            })}
           </TabsList>
           {dates?.map((date, index) => (
             <TabsContent key={index} value={`interview${index + 1}`}>
