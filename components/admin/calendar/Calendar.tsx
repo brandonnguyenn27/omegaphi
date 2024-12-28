@@ -13,6 +13,14 @@ function generateTimeSlots(startHour = 8, endHour = 20) {
   return slots;
 }
 
+function formatTimeSlotWithDateFns(timeSlot: string) {
+  const [hour, minute] = timeSlot.split(":");
+
+  const tempDate = new Date(2024, 0, 1, +hour, +minute);
+
+  return format(tempDate, "h:mm a");
+}
+
 interface SchedulerProps {
   interviews: InterviewDay[];
 }
@@ -24,6 +32,7 @@ export default function Scheduler({ interviews }: SchedulerProps) {
     return uniqueDates;
   }, [interviews]);
   const timeSlots = generateTimeSlots(8, 20);
+  console.log(timeSlots);
   const columns = 1 + distinctDates.length;
 
   return (
@@ -35,7 +44,6 @@ export default function Scheduler({ interviews }: SchedulerProps) {
         }}
         className="gap-0 border border-gray-300 bg-white"
       >
-        {/* Header Row: empty cell + date columns */}
         <div className="border-b border-gray-300 bg-gray-100 p-2" />
         {distinctDates.map((dateStr) => (
           <div
@@ -49,7 +57,7 @@ export default function Scheduler({ interviews }: SchedulerProps) {
         {timeSlots.map((timeLabel) => (
           <React.Fragment key={timeLabel}>
             <div className="border-b border-gray-300 p-2 text-center text-sm text-gray-600">
-              {timeLabel}
+              {formatTimeSlotWithDateFns(timeLabel)}
             </div>
 
             {distinctDates.map((dateStr) => {
