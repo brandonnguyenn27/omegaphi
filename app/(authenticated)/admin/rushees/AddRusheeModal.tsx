@@ -3,96 +3,91 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { addRusheeAction } from "@/actions/admin/rushee";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export default function AddRusheeModal() {
-  const [showModal, setShowModal] = useState(false);
+  const [open, setOpen] = useState(false);
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-
     await addRusheeAction(formData);
-
     router.refresh();
-
-    setShowModal(false);
+    setOpen(false);
   }
 
   return (
-    <>
-      <button
-        onClick={() => setShowModal(true)}
-        className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-      >
-        Add Rushee
-      </button>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button className="bg-blue-500 text-white" variant="default">
+          Add Rushee
+        </Button>
+      </DialogTrigger>
 
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-          <div className="bg-white p-4 rounded shadow-md w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">Add a Rushee</h2>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add a Rushee</DialogTitle>
+          <DialogDescription>
+            Fill out the fields below to create a new rushee record.
+          </DialogDescription>
+        </DialogHeader>
 
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block font-medium mb-1">First Name</label>
-                <input
-                  type="text"
-                  name="first_name"
-                  className="w-full border p-2 rounded"
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block font-medium mb-1">Last Name</label>
-                <input
-                  type="text"
-                  name="last_name"
-                  className="w-full border p-2 rounded"
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block font-medium mb-1">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Optional"
-                  className="w-full border p-2 rounded"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block font-medium mb-1">Phone</label>
-                <input
-                  type="text"
-                  name="phone"
-                  placeholder="Optional"
-                  className="w-full border p-2 rounded"
-                />
-              </div>
-
-              <div className="flex items-center justify-end space-x-2">
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="px-4 py-2 border rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-                >
-                  Add Rushee
-                </button>
-              </div>
-            </form>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block font-medium mb-1">First Name</label>
+            <input
+              type="text"
+              name="first_name"
+              className="w-full border p-2 rounded"
+              required
+            />
           </div>
-        </div>
-      )}
-    </>
+          <div>
+            <label className="block font-medium mb-1">Last Name</label>
+            <input
+              type="text"
+              name="last_name"
+              className="w-full border p-2 rounded"
+              required
+            />
+          </div>
+          <div>
+            <label className="block font-medium mb-1">Email</label>
+            <input
+              type="email"
+              name="email"
+              className="w-full border p-2 rounded"
+            />
+          </div>
+          <div>
+            <label className="block font-medium mb-1">Phone</label>
+            <input
+              type="text"
+              name="phone"
+              className="w-full border p-2 rounded"
+            />
+          </div>
+
+          <DialogFooter className="flex justify-end space-x-2">
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" className="bg-blue-500 text-white">
+              Add Rushee
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
