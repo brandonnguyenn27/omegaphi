@@ -13,7 +13,7 @@ const items: SidebarItem[] = [
   },
   {
     title: "Dashboard",
-    url: "/dashboard",
+    url: "admin/dashboard",
     icon: DashboardIcon,
   },
   {
