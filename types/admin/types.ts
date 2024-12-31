@@ -35,3 +35,25 @@ export type RusheeAvailability = {
   created_at?: string;
   updated_at?: string;
 };
+
+export type Availability = {
+  id: string;
+  rushee_id: string;
+  start_time: string;
+  end_time: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AvailabilityExtended = {
+  id: string;
+  rushee_id: string;
+  start_time: string;
+  end_time: string;
+  created_at: string;
+  updated_at: string;
+  rushees: {
+    first_name: string;
+    last_name: string;
+  };
+};

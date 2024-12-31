@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { InterviewDay } from "@/types/admin/types";
-import { format } from "date-fns";
+import { InterviewDay, AvailabilityExtended } from "@/types/admin/types";
+import { format, isWithinInterval, parseISO } from "date-fns";
 
 function generateTimeSlots(startHour = 8, endHour = 20) {
   const slots = [];
@@ -23,16 +23,26 @@ function formatTimeSlotWithDateFns(timeSlot: string) {
 
 interface SchedulerProps {
   interviews: InterviewDay[];
+  availabilities: AvailabilityExtended[];
 }
 
-export default function Scheduler({ interviews }: SchedulerProps) {
+export default function Scheduler({
+  interviews,
+  availabilities,
+}: SchedulerProps) {
   const distinctDates = useMemo(() => {
-    const dates = interviews.map((day) => day.interview_date);
-    const uniqueDates = Array.from(new Set(dates));
-    return uniqueDates;
-  }, [interviews]);
+    const dates = [
+      ...new Set([
+        ...interviews.map((day) => day.interview_date),
+        ...availabilities.map((a) =>
+          format(parseISO(a.start_time), "yyyy-MM-dd")
+        ),
+      ]),
+    ];
+    return dates.sort();
+  }, [interviews, availabilities]);
   const timeSlots = generateTimeSlots(8, 20);
-  console.log(timeSlots);
+
   const columns = 1 + distinctDates.length;
 
   return (
@@ -44,6 +54,7 @@ export default function Scheduler({ interviews }: SchedulerProps) {
         }}
         className="gap-0 border border-gray-300 bg-white"
       >
+        {/* Header Row */}
         <div className="border-b border-gray-300 bg-gray-100 p-2" />
         {distinctDates.map((dateStr) => (
           <div
@@ -54,39 +65,46 @@ export default function Scheduler({ interviews }: SchedulerProps) {
           </div>
         ))}
 
+        {/* Time Slots and Availabilities */}
         {timeSlots.map((timeLabel) => (
           <React.Fragment key={timeLabel}>
+            {/* Time Column */}
             <div className="border-b border-gray-300 p-2 text-center text-sm text-gray-600">
               {formatTimeSlotWithDateFns(timeLabel)}
             </div>
 
+            {/* Date Columns */}
             {distinctDates.map((dateStr) => {
-              const interviewsForDate = interviews.filter(
-                (i) => i.interview_date === dateStr
+              const availabilitiesForDate = availabilities.filter((a) =>
+                isWithinInterval(parseISO(`${dateStr}T${timeLabel}`), {
+                  start: parseISO(a.start_time),
+                  end: parseISO(a.end_time),
+                })
               );
 
               return (
                 <div
                   key={`${dateStr}-${timeLabel}`}
-                  className="border-l border-b border-gray-300 p-2 hover:bg-blue-50"
+                  className="border-l border-b border-gray-300 p-2 relative hover:bg-blue-50"
                 >
-                  {interviewsForDate
-                    .filter((i) => i.start_time.startsWith(timeLabel))
-                    .map((matchedInterview) => (
+                  {/* Flexbox to stack availability cards */}
+                  <div className="flex flex-col gap-1">
+                    {availabilitiesForDate.map((availability) => (
                       <div
-                        key={matchedInterview.id}
-                        className="bg-blue-100 p-1 rounded my-1"
+                        key={availability.id}
+                        className="bg-green-100 rounded p-2 shadow-md border"
+                        title={`Available from ${format(
+                          parseISO(availability.start_time),
+                          "p"
+                        )} to ${format(parseISO(availability.end_time), "p")}`}
                       >
-                        <p className="text-xs font-bold">
-                          {matchedInterview.title}
+                        <p className="text-sm font-semibold">
+                          {availability.rushees.first_name}{" "}
+                          {availability.rushees.last_name}
                         </p>
-                        {matchedInterview.description && (
-                          <p className="text-[0.7rem] text-gray-700">
-                            {matchedInterview.description}
-                          </p>
-                        )}
                       </div>
                     ))}
+                  </div>
                 </div>
               );
             })}
