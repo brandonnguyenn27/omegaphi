@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { Rushee } from "@/types/admin/types";
 import { RusheeAvailability } from "@/types/admin/types";
 import RusheeAvailabilityCard from "@/components/admin/rushee/RusheeAvailabilityCard";
+import AddAvailabilityModal from "@/components/admin/rushee/AddAvailabilityModal";
 
 async function fetchRusheeData(rusheeId: string) {
   const supabase = await createClient();
@@ -41,6 +42,7 @@ export default async function RusheeDetails({
           <p className="font-bold text-2xl">
             {rushee.first_name} {rushee.last_name}
           </p>
+          <AddAvailabilityModal rusheeId={rusheeId} />
           {availabilities?.map((availibility) => (
             <RusheeAvailabilityCard
               key={availibility.id}

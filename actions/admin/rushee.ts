@@ -38,9 +38,19 @@ export async function addRusheeAvailability(formData: FormData) {
   const start_time = formData.get("start_time") as string;
   const end_time = formData.get("end_time") as string;
 
-  await supabase
+  if (!rushee_id || !start_time || !end_time) {
+    throw new Error("Missing required fields");
+  }
+
+  const { data, error } = await supabase
     .from("rushee_availabilities")
-    .insert({ rushee_id, start_time, end_time });
+    .insert([{ rushee_id, start_time, end_time }]);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
 }
 export async function deleteRusheeAvailability(rusheeId: string) {
   const supabase = await createClient();
