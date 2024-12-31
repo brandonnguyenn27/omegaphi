@@ -20,8 +20,15 @@ export default async function InterviewPage() {
   return (
     <div>
       <div className="flex justify-center items-center w-full">
-        <Tabs defaultValue="interview1" className="w-3/4  justify-center">
-          <TabsList className={`grid w-full grid-cols-${dates?.length}`}>
+        <Tabs defaultValue="interview1" className="w-3/4 ">
+          <TabsList
+            className="grid w-full gap-2"
+            style={{
+              gridTemplateColumns: `repeat(${
+                dates?.length || 1
+              }, minmax(0, 1fr))`,
+            }}
+          >
             {dates?.map((date, index) => {
               return (
                 <TabsTrigger key={index} value={`interview${index + 1}`}>

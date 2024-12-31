@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 const adminFeatures = [
   { label: "Interviews", href: "/admin/interviews" },
   { label: "Rushees", href: "/admin/rushees" },
@@ -28,28 +29,29 @@ export default function AdminDashboard() {
           "
         >
           {adminFeatures.map((feature) => (
-            <Link
+            <Button
+              asChild
               key={feature.href}
-              href={feature.href}
               className="
-                flex
-                items-center
-                justify-center
-                rounded
-                border
-                border-gray-200
-                bg-white
-                p-6
-                text-center
-                text-lg
-                font-semibold
-                shadow-sm
-                hover:border-blue-300
-                hover:bg-blue-50
-              "
+            flex
+            items-center
+            justify-center
+            rounded
+            border
+            border-gray-200
+           
+            p-6
+            text-center
+            text-lg
+            font-semibold
+            shadow-sm
+            hover:border-blue-300
+            hover:bg-blue-50
+            hover:text-blue-700
+          "
             >
-              {feature.label}
-            </Link>
+              <Link href={feature.href}>{feature.label}</Link>
+            </Button>
           ))}
         </div>
       </div>

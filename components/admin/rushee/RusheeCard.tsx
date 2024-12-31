@@ -13,6 +13,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import Link from "next/link";
+import { Input } from "@/components/ui/input";
 import { SquareArrowOutUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { updateRusheeAction, deleteRusheeAction } from "@/actions/admin/rushee";
@@ -46,6 +47,7 @@ export default function RusheeCard({ rushee }: RusheeCardProps) {
 
   async function handleUpdate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     await updateRusheeAction({
       id: rushee.id,
       first_name: firstName,
@@ -58,14 +60,14 @@ export default function RusheeCard({ rushee }: RusheeCardProps) {
   }
 
   return (
-    <div className="rounded border p-4 space-y-2 bg-white shadow">
+    <div className="rounded border h-40 p-4 space-y-2 bg-white shadow flex flex-col justify-between">
       <p className="font-semibold">
         {rushee.first_name} {rushee.last_name}
       </p>
       {rushee.email && <p>Email: {rushee.email}</p>}
       {rushee.phone && <p>Phone: {rushee.phone}</p>}
 
-      <div className="flex space-x-2">
+      <div className="flex space-x-2 mt-4">
         <Button asChild>
           <Link
             href={{
@@ -90,8 +92,10 @@ export default function RusheeCard({ rushee }: RusheeCardProps) {
 
             <form onSubmit={handleUpdate} className="space-y-4">
               <div>
-                <label className="block font-medium mb-1">First Name</label>
-                <input
+                <label className="block font-medium mb-1">
+                  First Name<span className="text-red-500">*</span>
+                </label>
+                <Input
                   type="text"
                   className="w-full border p-2 rounded"
                   value={firstName}
@@ -100,8 +104,10 @@ export default function RusheeCard({ rushee }: RusheeCardProps) {
                 />
               </div>
               <div>
-                <label className="block font-medium mb-1">Last Name</label>
-                <input
+                <label className="block font-medium mb-1">
+                  Last Name<span className="text-red-500">*</span>
+                </label>
+                <Input
                   type="text"
                   className="w-full border p-2 rounded"
                   value={lastName}
@@ -111,19 +117,21 @@ export default function RusheeCard({ rushee }: RusheeCardProps) {
               </div>
               <div>
                 <label className="block font-medium mb-1">Email</label>
-                <input
+                <Input
                   type="email"
                   className="w-full border p-2 rounded"
                   value={email}
+                  placeholder="Optional"
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div>
                 <label className="block font-medium mb-1">Phone</label>
-                <input
+                <Input
                   type="text"
                   className="w-full border p-2 rounded"
                   value={phone}
+                  placeholder="Optional"
                   onChange={(e) => setPhone(e.target.value)}
                 />
               </div>

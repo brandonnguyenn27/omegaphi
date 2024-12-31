@@ -13,9 +13,11 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function AddRusheeModal() {
   const [open, setOpen] = useState(false);
+
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -44,8 +46,10 @@ export default function AddRusheeModal() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block font-medium mb-1">First Name</label>
-            <input
+            <label className="block font-medium mb-1">
+              First Name <span className="text-red-500">*</span>
+            </label>
+            <Input
               type="text"
               name="first_name"
               className="w-full border p-2 rounded"
@@ -53,8 +57,10 @@ export default function AddRusheeModal() {
             />
           </div>
           <div>
-            <label className="block font-medium mb-1">Last Name</label>
-            <input
+            <label className="block font-medium mb-1">
+              Last Name <span className="text-red-500">*</span>
+            </label>
+            <Input
               type="text"
               name="last_name"
               className="w-full border p-2 rounded"
@@ -63,17 +69,19 @@ export default function AddRusheeModal() {
           </div>
           <div>
             <label className="block font-medium mb-1">Email</label>
-            <input
+            <Input
               type="email"
               name="email"
+              placeholder="Optional"
               className="w-full border p-2 rounded"
             />
           </div>
           <div>
             <label className="block font-medium mb-1">Phone</label>
-            <input
+            <Input
               type="text"
               name="phone"
+              placeholder="Optional"
               className="w-full border p-2 rounded"
             />
           </div>
