@@ -18,3 +18,20 @@ export type InterviewDay = {
   created_at: string | null;
   updated_at: string | null;
 };
+
+export type Rushee = {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email?: string;
+  phone?: string;
+};
+
+export type RusheeAvailability = {
+  id: string;
+  rushee_id: string;
+  start_time: string;
+  end_time: string;
+  created_at?: string;
+  updated_at?: string;
+};
