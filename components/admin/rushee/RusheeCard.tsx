@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-// Import Dialog components from wherever you placed shadcn’s files
 import {
   Dialog,
   DialogTrigger,
@@ -13,7 +12,8 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-
+import Link from "next/link";
+import { SquareArrowOutUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { updateRusheeAction, deleteRusheeAction } from "@/actions/admin/rushee";
 
@@ -66,6 +66,16 @@ export default function RusheeCard({ rushee }: RusheeCardProps) {
       {rushee.phone && <p>Phone: {rushee.phone}</p>}
 
       <div className="flex space-x-2">
+        <Button asChild>
+          <Link
+            href={{
+              pathname: "/admin/rushees/view",
+              query: { rusheeId: rushee.id },
+            }}
+          >
+            <SquareArrowOutUpRight />
+          </Link>
+        </Button>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button variant="default">Edit</Button>
