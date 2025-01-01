@@ -24,7 +24,7 @@ export function AppSidebar({ items = [] }: { items: SidebarItem[] }) {
       <SidebarHeader />
       <SidebarContent>
         <SidebarGroup />
-        <SidebarGroupLabel>Application</SidebarGroupLabel>
+        <SidebarGroupLabel></SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
             {items.map((item) => (

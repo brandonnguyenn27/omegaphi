@@ -16,11 +16,7 @@ const items: SidebarItem[] = [
     url: "/admin/dashboard",
     icon: DashboardIcon,
   },
-  {
-    title: "Events",
-    url: "/admin/events",
-    icon: CalendarIcon,
-  },
+
   {
     title: "Rush",
     url: "/rush",
@@ -29,6 +25,29 @@ const items: SidebarItem[] = [
       {
         title: "Interviews",
         url: "/rush/interviews",
+      },
+    ],
+  },
+  {
+    title: "Admin",
+    url: "/admin",
+    icon: CalendarIcon,
+    subItem: [
+      {
+        title: "Scheduler",
+        url: "/admin/scheduler",
+      },
+      {
+        title: "Rushees",
+        url: "/admin/rushees",
+      },
+      {
+        title: "Interview Dates",
+        url: "/admin/interview-dates",
+      },
+      {
+        title: "Events",
+        url: "/admin/events",
       },
     ],
   },

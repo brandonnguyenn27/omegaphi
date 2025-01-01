@@ -4,6 +4,26 @@ import React, { useMemo } from "react";
 import { InterviewDay, AvailabilityExtended } from "@/types/admin/types";
 import { format, isWithinInterval, parseISO } from "date-fns";
 
+const colorPalette = [
+  "bg-red-100",
+  "bg-green-100",
+  "bg-blue-100",
+  "bg-yellow-100",
+  "bg-purple-100",
+  "bg-pink-100",
+  "bg-indigo-100",
+  "bg-teal-100",
+];
+
+const getColorForRushee = (rusheeId: string) => {
+  const index =
+    rusheeId
+      .split("")
+      .map((char) => char.charCodeAt(0))
+      .reduce((acc, val) => acc + val, 0) % colorPalette.length;
+  return colorPalette[index];
+};
+
 function generateTimeSlots(startHour = 8, endHour = 20) {
   const slots = [];
   for (let hour = startHour; hour < endHour; hour++) {
@@ -92,7 +112,9 @@ export default function Scheduler({
                     {availabilitiesForDate.map((availability) => (
                       <div
                         key={availability.id}
-                        className="bg-green-100 rounded p-2 shadow-md border"
+                        className={`${getColorForRushee(
+                          availability.rushee_id
+                        )} rounded p-2 shadow-md border`}
                         title={`Available from ${format(
                           parseISO(availability.start_time),
                           "p"
