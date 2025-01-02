@@ -11,13 +11,22 @@ import {
 } from "@/components/ui/dialog";
 import EventForm from "./EventForm";
 import { Event } from "@/types/admin/types";
+import { UpdateEventAction } from "@/actions/admin/event";
+import { useRouter } from "next/navigation";
 
 interface EditEventModalProps {
   event: Event;
 }
 
 export default function EditEventModal({ event }: EditEventModalProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+
+  const handleUpdate = async (formData: FormData) => {
+    await UpdateEventAction(event.id, formData);
+    setOpen(false);
+    router.refresh();
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -28,7 +37,7 @@ export default function EditEventModal({ event }: EditEventModalProps) {
         <DialogHeader>
           <DialogTitle>Edit Event</DialogTitle>
         </DialogHeader>
-        <EventForm event={event} onComplete={() => setOpen(false)} />
+        <EventForm event={event} submitAction={handleUpdate} />
       </DialogContent>
     </Dialog>
   );

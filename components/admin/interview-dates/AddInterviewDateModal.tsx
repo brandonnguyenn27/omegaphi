@@ -25,7 +25,11 @@ export default function AddInterviewDateModal() {
       router.refresh();
       setOpen(false);
     } catch (error) {
-      setError((error as any).message);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
     }
   }
   return (

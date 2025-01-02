@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 const adminFeatures = [
-  { label: "Interviews", href: "/admin/interviews" },
+  { label: "Scheduler", href: "/admin/scheduler" },
   { label: "Rushees", href: "/admin/rushees" },
   { label: "Interview Dates", href: "/admin/interview-dates" },
   { label: "Events", href: "/admin/events" },
