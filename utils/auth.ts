@@ -20,3 +20,18 @@ export async function isAdmin(): Promise<boolean> {
 
   return data === true;
 }
+
+export async function getRole(): Promise<string> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { data, error } = await supabase.rpc("get_user_role", {
+    p_user_id: user?.id,
+  });
+  if (error) console.error(error);
+  else console.log(data);
+
+  return data;
+}

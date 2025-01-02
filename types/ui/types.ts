@@ -3,11 +3,13 @@ export type SidebarItem = {
   url: string;
   icon: React.ElementType;
   subItem?: SidebarSubItem[];
+  roles?: string[];
 };
 
 export type SidebarSubItem = {
   title: string;
   url: string;
+  roles?: string[];
 };
 
 export type Interview = {

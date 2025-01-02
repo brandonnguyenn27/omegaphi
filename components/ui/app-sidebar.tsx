@@ -18,7 +18,13 @@ import {
 import { SidebarItem } from "@/types/ui/types";
 import { Plus } from "lucide-react";
 
-export function AppSidebar({ items = [] }: { items: SidebarItem[] }) {
+export function AppSidebar({
+  items = [],
+  role,
+}: {
+  items: SidebarItem[];
+  role: string;
+}) {
   return (
     <Sidebar>
       <SidebarHeader />
@@ -27,20 +33,22 @@ export function AppSidebar({ items = [] }: { items: SidebarItem[] }) {
         <SidebarGroupLabel></SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
-            {items.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                {item.subItem ? (
-                  <CollapsibleMenuItem item={item} />
-                ) : (
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon className="h-4 w-4 mr-2" />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                )}
-              </SidebarMenuItem>
-            ))}
+            {items.map((item) =>
+              item.roles?.includes(role) ? (
+                <SidebarMenuItem key={item.title}>
+                  {item.subItem ? (
+                    <CollapsibleMenuItem item={item} />
+                  ) : (
+                    <SidebarMenuButton asChild>
+                      <a href={item.url}>
+                        <item.icon className="h-4 w-4 mr-2" />
+                        {item.title}
+                      </a>
+                    </SidebarMenuButton>
+                  )}
+                </SidebarMenuItem>
+              ) : null
+            )}
           </SidebarMenu>
         </SidebarGroupContent>
         <SidebarGroup />
