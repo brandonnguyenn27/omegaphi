@@ -43,3 +43,32 @@ export async function deleteInterviewDateAction(interviewId: string) {
     throw new Error(error.message);
   }
 }
+
+export async function addUserAvailabilityAction(formData: FormData) {
+  const supabase = await createClient();
+  const user_id = formData.get("user_id") as string;
+  const start_time = formData.get("start_time") as string;
+  const end_time = formData.get("end_time") as string;
+  const interview_day_id = formData.get("interview_day_id") as string;
+
+  const { data, error } = await supabase
+    .from("user_availabilities")
+    .insert([{ user_id, start_time, end_time, interview_day_id }]);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+}
+
+export async function deleteUserAvailabilityAction(availabilityId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("user_availabilities")
+    .delete()
+    .eq("id", availabilityId);
+  if (error) {
+    throw new Error(error.message);
+  }
+}
