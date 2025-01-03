@@ -1,8 +1,9 @@
 "use client";
 
-import { createClient } from "@/utils/supabase/client";
 import EventCard from "./EventCard";
 import { Event } from "@/types/admin/types";
+import { DeleteEventAction } from "@/actions/admin/event";
+import { useRouter } from "next/navigation";
 
 interface EventListProps {
   events: Event[];
@@ -10,18 +11,10 @@ interface EventListProps {
 }
 
 export default function EventList({ events, isAdmin }: EventListProps) {
-  const supabase = createClient();
-
+  const router = useRouter();
   const handleDelete = async (id: string) => {
-    const { error } = await supabase.from("events").delete().match({ id });
-
-    if (error) {
-      console.error("Error deleting event:", error);
-      return;
-    }
-
-    // Refresh the page
-    window.location.reload();
+    await DeleteEventAction(id);
+    router.refresh();
   };
 
   return (
@@ -30,8 +23,8 @@ export default function EventList({ events, isAdmin }: EventListProps) {
         <EventCard
           key={event.id}
           event={event}
-          onDelete={handleDelete}
           isAdmin={isAdmin}
+          onDelete={handleDelete}
         />
       ))}
     </div>
