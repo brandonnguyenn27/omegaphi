@@ -49,8 +49,25 @@ export async function addUserAvailabilityAction(formData: FormData) {
   const user_id = formData.get("user_id") as string;
   const start_time = formData.get("start_time") as string;
   const end_time = formData.get("end_time") as string;
-  const interview_day_id = formData.get("interview_day_id") as string;
+  const interview_date = formData.get("date") as string;
 
+  // Look up the interview day ID based on the date
+  const { data: interviewDays, error: lookupError } = await supabase
+    .from("interview_days")
+    .select("id")
+    .eq("interview_date", interview_date);
+
+  if (lookupError) {
+    throw new Error(lookupError.message);
+  }
+
+  if (!interviewDays || interviewDays.length === 0) {
+    throw new Error("No interview day found for the specified date.");
+  }
+
+  const interview_day_id = interviewDays[0].id;
+
+  // Insert the user availability
   const { data, error } = await supabase
     .from("user_availabilities")
     .insert([{ user_id, start_time, end_time, interview_day_id }]);

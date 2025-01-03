@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import InterviewCard from "@/components/interviews/InterviewCard";
 import { createClient } from "@/utils/supabase/server";
 import { formatDate } from "@/utils/helper";
+import AddUserAvailabilityModal from "@/components/admin/interviews/AddUserAvailabilityModal";
 export default async function InterviewPage() {
   const supabase = await createClient();
   const { data: user } = await supabase.auth.getUser();
