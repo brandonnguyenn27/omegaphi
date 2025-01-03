@@ -2,31 +2,27 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { UserAvailability } from "@/types/admin/types";
 import { Input } from "@/components/ui/input";
 
 interface UserAvailabilityFormProps {
-  availability?: UserAvailability;
   submitAction: (formData: FormData) => Promise<void>;
-  interview_day_id: string;
+  userId: string;
 }
 
 export default function UserAvailabilityForm({
-  availability,
   submitAction,
-  interview_day_id,
+  userId,
 }: UserAvailabilityFormProps) {
-  const [startTime, setStartTime] = useState(availability?.start_time ?? "");
-  const [endTime, setEndTime] = useState(availability?.end_time ?? "");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [date, setDate] = useState("");
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("date", date);
-    formData.append("user_id", availability?.user_id ?? "");
+    formData.append("user_id", userId);
     formData.append("start_time", startTime);
     formData.append("end_time", endTime);
-    formData.append("interview_day_id", interview_day_id);
 
     await submitAction(formData);
   };

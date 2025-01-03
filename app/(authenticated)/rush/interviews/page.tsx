@@ -20,6 +20,8 @@ export default async function InterviewPage() {
 
   return (
     <div>
+      <h1 className="text-2xl font-bold">Interviews</h1>
+      <AddUserAvailabilityModal userId={userId || ""} />
       <div className="flex justify-center items-center w-full">
         <Tabs defaultValue="interview1" className="w-3/4 ">
           <TabsList
@@ -32,8 +34,12 @@ export default async function InterviewPage() {
           >
             {dates?.map((date, index) => {
               return (
-                <TabsTrigger key={index} value={`interview${index + 1}`}>
-                  {formatDate(date.interview_date)}
+                <TabsTrigger
+                  asChild
+                  key={index}
+                  value={`interview${index + 1}`}
+                >
+                  <div>{formatDate(date.interview_date)}</div>
                 </TabsTrigger>
               );
             })}

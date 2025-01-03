@@ -17,22 +17,33 @@ import UserAvailabilityForm from "./InterviewAvailabilityForm";
 
 interface AddUserAvailabilityModalProps {
   userId: string;
-  interview_day_id: string;
 }
 
 export default function AddUserAvailabilityModal({
   userId,
-  interview_day_id,
 }: AddUserAvailabilityModalProps) {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   async function handleSubmit(formData: FormData) {
+    const startTime = formData.get("start_time") as string;
+    const endTime = formData.get("end_time") as string;
+
+    if (startTime >= endTime) {
+      setError("Start time must be less than end time.");
+      return;
+    }
+
     formData.append("user_id", userId);
-    formData.append("interview_day_id", interview_day_id);
-    await addUserAvailabilityAction(formData);
-    setOpen(false);
-    router.refresh();
+
+    try {
+      await addUserAvailabilityAction(formData);
+      setOpen(false);
+      router.refresh();
+    } catch {
+      setError("An error occurred while adding availability.");
+    }
   }
 
   return (
@@ -47,7 +58,8 @@ export default function AddUserAvailabilityModal({
             Add your availability for interviews.
           </DialogDescription>
         </DialogHeader>
-        <UserAvailabilityForm submitAction={handleSubmit} />
+        {error && <div className="text-red-500 mb-4">{error}</div>}
+        <UserAvailabilityForm submitAction={handleSubmit} userId={userId} />
         <DialogFooter>
           <Button type="submit">Submit</Button>
         </DialogFooter>

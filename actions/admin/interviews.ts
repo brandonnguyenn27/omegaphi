@@ -75,6 +75,7 @@ export async function addUserAvailabilityAction(formData: FormData) {
   if (error) {
     throw new Error(error.message);
   }
+  console.log("User availability submitted", data);
 
   return data;
 }
