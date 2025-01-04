@@ -15,8 +15,10 @@ export default function InterviewCard({ interviews }: InterviewCardProps) {
   if (interviews.length === 0) {
     return (
       <Card>
-        <CardContent>
-          <p>You have no interviews scheduled yet.</p>
+        <CardContent className="flex text-center justify-center">
+          <p className="pt-2">
+            You have no interviews scheduled for this day yet.
+          </p>
         </CardContent>
       </Card>
     );
