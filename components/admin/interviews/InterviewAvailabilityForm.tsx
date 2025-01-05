@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface UserAvailabilityFormProps {
   submitAction: (formData: FormData) => Promise<void>;
@@ -63,9 +63,10 @@ export default function UserAvailabilityForm({
           className="w-full p-2 border rounded"
           required
         />
+        <Button className="mt-4" type="submit">
+          Submit
+        </Button>
       </div>
-
-      <Button type="submit">Submit</Button>
     </form>
   );
 }

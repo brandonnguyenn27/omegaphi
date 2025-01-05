@@ -36,7 +36,7 @@ export default function EventForm({ event, submitAction }: EventFormProps) {
         <label className="block mb-2">
           Title<span className="text-red-500">*</span>
         </label>
-        <input
+        <Input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
