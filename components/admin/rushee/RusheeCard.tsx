@@ -60,7 +60,7 @@ export default function RusheeCard({ rushee }: RusheeCardProps) {
   }
 
   return (
-    <div className="rounded border h-40 p-4 space-y-2 bg-white shadow flex flex-col justify-between">
+    <div className="rounded border h-auto p-4 space-y-2 bg-white shadow flex flex-col justify-between">
       <p className="font-semibold">
         {rushee.first_name} {rushee.last_name}
       </p>
