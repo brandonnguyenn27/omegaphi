@@ -20,7 +20,7 @@ export default function EventCard({
   return (
     <div className="border p-4 rounded">
       <h3 className="font-bold">{event.title}</h3>
-      <p>{event.description}</p>
+      <p className="italic">{event.description}</p>
       <p>Date: {formattedDate}</p>
       <p>
         Time: {formatTime(event.start_time)} - {formatTime(event.end_time)}
