@@ -49,7 +49,9 @@ export default function AddUserAvailabilityModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button>Add Availability</Button>
+        <div>
+          <Button>Add Availability</Button>
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
