@@ -16,9 +16,7 @@ export default function UserAvailabilityForm({
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [date, setDate] = useState("");
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData();
+  const handleSubmit = async (formData: FormData) => {
     formData.append("date", date);
     formData.append("user_id", userId);
     formData.append("start_time", startTime);
@@ -27,7 +25,7 @@ export default function UserAvailabilityForm({
     await submitAction(formData);
   };
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form action={handleSubmit} className="space-y-4">
       <div>
         <label className="block font-medium mb-1">
           Date <span className="text-red-500">*</span>
