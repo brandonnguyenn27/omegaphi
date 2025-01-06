@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import { addUserAvailabilityAction } from "@/actions/admin/interviews";
 import {
   Dialog,
@@ -14,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import UserAvailabilityForm from "./InterviewAvailabilityForm";
+import { revalidatePath } from "next/cache";
 
 interface AddUserAvailabilityModalProps {
   userId: string;
@@ -24,7 +24,6 @@ export default function AddUserAvailabilityModal({
 }: AddUserAvailabilityModalProps) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
-  const router = useRouter();
 
   async function handleSubmit(formData: FormData) {
     const startTime = formData.get("start_time") as string;
@@ -40,7 +39,7 @@ export default function AddUserAvailabilityModal({
     try {
       await addUserAvailabilityAction(formData);
       setOpen(false);
-      router.refresh();
+      revalidatePath("/admin/interviews");
     } catch {
       setError("An error occurred while adding availability.");
     }
