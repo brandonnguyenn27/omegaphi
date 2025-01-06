@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import UserAvailabilityForm from "./InterviewAvailabilityForm";
-import { revalidatePath } from "next/cache";
 
 interface AddUserAvailabilityModalProps {
   userId: string;
@@ -39,7 +38,6 @@ export default function AddUserAvailabilityModal({
     try {
       await addUserAvailabilityAction(formData);
       setOpen(false);
-      revalidatePath("/admin/interviews");
     } catch {
       setError("An error occurred while adding availability.");
     }

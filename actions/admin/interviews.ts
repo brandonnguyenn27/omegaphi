@@ -1,5 +1,6 @@
 "use server";
 import { createClient } from "@/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export async function addInterviewDateAction(formData: FormData) {
   const supabase = await createClient();
@@ -76,7 +77,7 @@ export async function addUserAvailabilityAction(formData: FormData) {
     throw new Error(error.message);
   }
   console.log("User availability submitted", data);
-
+  revalidatePath("/admin/interviews");
   return data;
 }
 
