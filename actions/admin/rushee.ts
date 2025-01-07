@@ -84,14 +84,19 @@ export async function deleteRusheeAvailability(rusheeId: string) {
     .eq("rushee_id", rusheeId);
 }
 
-export async function updateRusheeAvailability(payload: {
-  id: string;
-  rushee_id: string;
-  start_time: string;
-  end_time: string;
-}) {
-  const { id, ...fields } = payload;
-
+export async function updateRusheeAvailability(
+  availability_id: string,
+  rushee_id: string,
+  formData: FormData
+) {
   const supabase = await createClient();
-  await supabase.from("rushee_availabilities").update(fields).eq("id", id);
+  const start_time = formData.get("start_time") as string;
+  const end_time = formData.get("end_time") as string;
+
+  await supabase
+    .from("rushee_availabilities")
+    .update({ start_time, end_time })
+    .eq("id", availability_id);
+
+  revalidatePath(`/admin/rushees/view?rusheeId=${rushee_id}`);
 }

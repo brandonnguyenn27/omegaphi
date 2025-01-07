@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { format, toZonedTime } from "date-fns-tz";
 import { RusheeAvailability } from "@/types/admin/types";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import {
   deleteRusheeAvailability,
   updateRusheeAvailability,
@@ -25,32 +25,38 @@ interface RusheeAvailabilityCardProps {
 const RusheeAvailabilityCard = ({
   availability,
 }: RusheeAvailabilityCardProps) => {
-  const router = useRouter();
+  const timeZone = "UTC";
   const [open, setOpen] = useState(false);
-  const [formState, setFormState] = useState({
-    date: format(new Date(availability.start_time), "yyyy-MM-dd"),
-    start_time: format(new Date(availability.start_time), "HH:mm"),
-    end_time: format(new Date(availability.end_time), "HH:mm"),
-  });
+  const date = format(new Date(availability.start_time), "yyyy-MM-dd");
+  const start_time = format(
+    toZonedTime(new Date(availability.start_time), timeZone),
+    "HH:mm"
+  );
+  const end_time = format(
+    toZonedTime(new Date(availability.end_time), timeZone),
+    "HH:mm"
+  );
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = async (formData: FormData) => {
+    const date = formData.get("date") as string;
 
-    const newStartTime = new Date(`${formState.date}T${formState.start_time}`);
-    const newEndTime = new Date(`${formState.date}T${formState.end_time}`);
+    const newStartTime = new Date(`${date}T${formData.get("start_time")}:00Z`);
+    const newEndTime = new Date(`${date}T${formData.get("end_time")}:00Z`);
 
-    await updateRusheeAvailability({
-      id: availability.id,
-      rushee_id: availability.rushee_id,
-      start_time: newStartTime.toISOString(),
-      end_time: newEndTime.toISOString(),
-    });
+    console.log(newStartTime, newEndTime);
+
+    formData.set("start_time", newStartTime.toISOString());
+    formData.set("end_time", newEndTime.toISOString());
+
+    await updateRusheeAvailability(
+      availability.id,
+      availability.rushee_id,
+      formData
+    );
 
     setOpen(false);
-    router.refresh();
   };
 
-  const timeZone = "UTC";
   return (
     <Card key={availability.id} className="shadow-lg">
       <CardHeader>
@@ -87,16 +93,10 @@ const RusheeAvailabilityCard = ({
               <DialogHeader>
                 <DialogTitle>Edit Availability</DialogTitle>
               </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form action={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium">Date</label>
-                  <Input
-                    type="date"
-                    value={formState.date}
-                    onChange={(e) =>
-                      setFormState({ ...formState, date: e.target.value })
-                    }
-                  />
+                  <Input type="date" name="date" defaultValue={date} required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium">
@@ -104,21 +104,13 @@ const RusheeAvailabilityCard = ({
                   </label>
                   <Input
                     type="time"
-                    value={formState.start_time}
-                    onChange={(e) =>
-                      setFormState({ ...formState, start_time: e.target.value })
-                    }
+                    name="start_time"
+                    defaultValue={start_time}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium">End Time</label>
-                  <Input
-                    type="time"
-                    value={formState.end_time}
-                    onChange={(e) =>
-                      setFormState({ ...formState, end_time: e.target.value })
-                    }
-                  />
+                  <Input type="time" name="end_time" defaultValue={end_time} />
                 </div>
                 <DialogFooter>
                   <Button type="submit">Save Changes</Button>
