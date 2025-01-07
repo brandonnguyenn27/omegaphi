@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import { addRusheeAvailability } from "@/actions/admin/rushee";
 import {
   Dialog,
@@ -32,33 +32,32 @@ export default function AddAvailabilityModal({
 }: AddAvailabilityModalProps) {
   const [open, setOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
-  const router = useRouter();
-  const [formState, setFormState] = useState({
-    date: "",
-    start_time: "",
-    end_time: "",
-  });
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function handleSubmit(formData: FormData) {
+    const date = formData.get("date") as string;
+    const startTime = formData.get("start_time") as string;
+    const endTime = formData.get("end_time") as string;
 
-    const newStartTime = new Date(`${formState.date}T${formState.start_time}`);
-    const newEndTime = new Date(`${formState.date}T${formState.end_time}`);
+    const startDateTime = new Date(`${date}T${startTime}:00Z`);
+    const endDateTime = new Date(`${date}T${endTime}:00Z`);
 
-    if (newStartTime >= newEndTime) {
+    console.log(startDateTime, endDateTime);
+
+    if (startDateTime >= endDateTime) {
       setAlertOpen(true);
       return;
     }
-
-    const formData = new FormData();
+    formData.set("start_time", startDateTime.toISOString());
+    formData.set("end_time", endDateTime.toISOString());
     formData.append("rushee_id", rusheeId);
-    formData.append("start_time", newStartTime.toISOString());
-    formData.append("end_time", newEndTime.toISOString());
 
-    await addRusheeAvailability(formData);
+    try {
+      await addRusheeAvailability(formData);
 
-    router.refresh();
-    setOpen(false);
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -76,39 +75,18 @@ export default function AddAvailabilityModal({
               Fill out the fields below to add a new availability record.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form action={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium">Date</label>
-              <Input
-                type="date"
-                value={formState.date}
-                onChange={(e) =>
-                  setFormState({ ...formState, date: e.target.value })
-                }
-                required
-              />
+              <Input type="date" name="date" required />
             </div>
             <div>
               <label className="block text-sm font-medium">Start Time</label>
-              <Input
-                type="time"
-                value={formState.start_time}
-                onChange={(e) =>
-                  setFormState({ ...formState, start_time: e.target.value })
-                }
-                required
-              />
+              <Input type="time" name="start_time" required />
             </div>
             <div>
               <label className="block text-sm font-medium">End Time</label>
-              <Input
-                type="time"
-                value={formState.end_time}
-                onChange={(e) =>
-                  setFormState({ ...formState, end_time: e.target.value })
-                }
-                required
-              />
+              <Input type="time" name="end_time" required />
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setOpen(false)}>

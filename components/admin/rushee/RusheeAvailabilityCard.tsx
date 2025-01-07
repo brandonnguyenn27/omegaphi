@@ -1,7 +1,7 @@
 "use client";
 import { Card, CardHeader, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
+import { format, toZonedTime } from "date-fns-tz";
 import { RusheeAvailability } from "@/types/admin/types";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -49,21 +49,30 @@ const RusheeAvailabilityCard = ({
     setOpen(false);
     router.refresh();
   };
+
+  const timeZone = "UTC";
   return (
     <Card key={availability.id} className="shadow-lg">
       <CardHeader>
         <h3 className="text-lg font-semibold">
-          Availability on {format(new Date(availability.start_time), "PPP")}
+          Availability on{" "}
+          {format(
+            toZonedTime(new Date(availability.start_time), timeZone),
+            "PPP"
+          )}
         </h3>
       </CardHeader>
       <div className="p-4">
         <p>
           <span className="font-medium">Start Time:</span>{" "}
-          {format(new Date(availability.start_time), "p")}
+          {format(
+            toZonedTime(new Date(availability.start_time), timeZone),
+            "p"
+          )}
         </p>
         <p>
           <span className="font-medium">End Time:</span>{" "}
-          {format(new Date(availability.end_time), "p")}
+          {format(toZonedTime(new Date(availability.end_time), timeZone), "p")}
         </p>
       </div>
       <CardFooter className="flex justify-between items-center">

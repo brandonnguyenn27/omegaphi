@@ -1,4 +1,6 @@
 "use server";
+import { revalidatePath } from "next/cache";
+
 import { createClient } from "@/utils/supabase/server";
 
 export async function addRusheeAction(formData: FormData) {
@@ -12,6 +14,7 @@ export async function addRusheeAction(formData: FormData) {
   await supabase
     .from("rushees")
     .insert({ first_name, last_name, email, phone });
+  revalidatePath("/admin/rushees");
 }
 
 export async function deleteRusheeAction(rusheeId: string) {
@@ -19,17 +22,36 @@ export async function deleteRusheeAction(rusheeId: string) {
   await supabase.from("rushees").delete().eq("id", rusheeId);
 }
 
-export async function updateRusheeAction(payload: {
-  id: string;
-  first_name: string;
-  last_name: string;
-  email?: string;
-  phone?: string;
-}) {
-  const { id, ...fields } = payload;
-
+export async function updateRusheeAction(
+  rushee_id: string,
+  formData: FormData
+) {
   const supabase = await createClient();
-  await supabase.from("rushees").update(fields).eq("id", id);
+  const first_name = formData.get("first_name") as string;
+  const last_name = formData.get("last_name") as string;
+  const email = formData.get("email") as string | null;
+  const phone = formData.get("phone") as string | null;
+
+  if (!first_name || !last_name) {
+    throw new Error("First name and last name are required");
+  }
+
+  const updateData: { [key: string]: string | null } = {
+    first_name,
+    last_name,
+  };
+
+  if (email) {
+    updateData.email = email;
+  }
+
+  if (phone) {
+    updateData.phone = phone;
+  }
+
+  await supabase.from("rushees").update(updateData).eq("id", rushee_id);
+
+  revalidatePath("/admin/rushees");
 }
 export async function addRusheeAvailability(formData: FormData) {
   const supabase = await createClient();
@@ -49,6 +71,8 @@ export async function addRusheeAvailability(formData: FormData) {
   if (error) {
     throw new Error(error.message);
   }
+
+  revalidatePath(`/admin/rushees/view?rusheeId=${rushee_id}`);
 
   return data;
 }

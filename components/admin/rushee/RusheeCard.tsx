@@ -33,11 +33,6 @@ interface RusheeCardProps {
 export default function RusheeCard({ rushee }: RusheeCardProps) {
   const router = useRouter();
 
-  const [firstName, setFirstName] = useState(rushee.first_name);
-  const [lastName, setLastName] = useState(rushee.last_name);
-  const [email, setEmail] = useState(rushee.email ?? "");
-  const [phone, setPhone] = useState(rushee.phone ?? "");
-
   const [open, setOpen] = useState(false);
 
   async function handleDelete() {
@@ -45,18 +40,9 @@ export default function RusheeCard({ rushee }: RusheeCardProps) {
     router.refresh();
   }
 
-  async function handleUpdate(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    await updateRusheeAction({
-      id: rushee.id,
-      first_name: firstName,
-      last_name: lastName,
-      email,
-      phone,
-    });
+  async function handleUpdate(formData: FormData) {
+    await updateRusheeAction(rushee.id, formData);
     setOpen(false);
-    router.refresh();
   }
 
   return (
@@ -90,16 +76,16 @@ export default function RusheeCard({ rushee }: RusheeCardProps) {
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleUpdate} className="space-y-4">
+            <form action={handleUpdate} className="space-y-4">
               <div>
                 <label className="block font-medium mb-1">
                   First Name<span className="text-red-500">*</span>
                 </label>
                 <Input
                   type="text"
+                  name="first_name"
                   className="w-full border p-2 rounded"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  defaultValue={rushee.first_name}
                   required
                 />
               </div>
@@ -109,9 +95,9 @@ export default function RusheeCard({ rushee }: RusheeCardProps) {
                 </label>
                 <Input
                   type="text"
+                  name="last_name"
                   className="w-full border p-2 rounded"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  defaultValue={rushee.last_name}
                   required
                 />
               </div>
@@ -119,20 +105,20 @@ export default function RusheeCard({ rushee }: RusheeCardProps) {
                 <label className="block font-medium mb-1">Email</label>
                 <Input
                   type="email"
+                  name="email"
                   className="w-full border p-2 rounded"
-                  value={email}
+                  defaultValue={rushee.email || ""}
                   placeholder="Optional"
-                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div>
                 <label className="block font-medium mb-1">Phone</label>
                 <Input
                   type="text"
+                  name="phone"
                   className="w-full border p-2 rounded"
-                  value={phone}
+                  defaultValue={rushee.phone || ""}
                   placeholder="Optional"
-                  onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
               <DialogFooter className="flex justify-end space-x-2">

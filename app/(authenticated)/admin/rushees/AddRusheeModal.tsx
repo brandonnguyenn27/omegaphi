@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import { addRusheeAction } from "@/actions/admin/rushee";
 import {
   Dialog,
@@ -18,13 +18,8 @@ import { Input } from "@/components/ui/input";
 export default function AddRusheeModal() {
   const [open, setOpen] = useState(false);
 
-  const router = useRouter();
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  async function handleSubmit(formData: FormData) {
     await addRusheeAction(formData);
-    router.refresh();
     setOpen(false);
   }
 
@@ -44,7 +39,7 @@ export default function AddRusheeModal() {
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form action={handleSubmit} className="space-y-4">
           <div>
             <label className="block font-medium mb-1">
               First Name <span className="text-red-500">*</span>
