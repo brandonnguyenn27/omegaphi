@@ -1,16 +1,14 @@
 import { createClient } from "@/utils/supabase/server";
 import DateCard from "@/components/admin/interview-dates/DateCard";
-import { InterviewDay } from "@/types/admin/types";
+
 import AddInterviewDateModal from "@/components/admin/interview-dates/AddInterviewDateModal";
 export default async function InterviewDatePage() {
   const supabase = await createClient();
-  const { data: interviewDates, error } = (await supabase
+  const { data: interviewDates, error } = await supabase
     .from("interview_days")
     .select("*")
-    .order("interview_date", { ascending: true })) as {
-    data: InterviewDay[];
-    error: any;
-  };
+    .order("interview_date", { ascending: true });
+
   if (error) {
     console.error(error);
   }

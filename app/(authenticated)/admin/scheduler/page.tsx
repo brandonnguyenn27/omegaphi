@@ -1,6 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
 import Scheduler from "@/components/admin/calendar/Calendar";
-import { AvailabilityExtended } from "@/types/admin/types";
 
 export default async function AdminCalendarPage() {
   const supabase = await createClient();
@@ -28,7 +27,7 @@ export default async function AdminCalendarPage() {
   `
     )
     .order("start_time", { ascending: true });
-  console.log(availabilities);
+
   return (
     <section className="p-4">
       <h1 className="text-xl font-semibold mb-4">Interview Scheduler</h1>
