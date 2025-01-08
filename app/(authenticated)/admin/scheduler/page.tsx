@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-import Scheduler from "@/components/admin/calendar/Calendar";
+import Scheduler from "@/components/admin/calendar/Scheduler";
 
 export default async function AdminCalendarPage() {
   const supabase = await createClient();
