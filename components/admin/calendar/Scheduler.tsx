@@ -1,30 +1,11 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { format, isWithinInterval, parseISO } from "date-fns";
+import { format, addMinutes, parseISO } from "date-fns";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { InterviewDay, AvailabilityExtended } from "@/types/admin/types";
 import { Rushee } from "@/types/admin/types";
-
-const colorPalette = [
-  "bg-red-100",
-  "bg-green-100",
-  "bg-blue-100",
-  "bg-yellow-100",
-  "bg-purple-100",
-  "bg-pink-100",
-  "bg-indigo-100",
-  "bg-teal-100",
-];
-
-const getColorForRushee = (rusheeId: string) => {
-  const index =
-    rusheeId
-      .split("")
-      .map((char) => char.charCodeAt(0))
-      .reduce((acc, val) => acc + val, 0) % colorPalette.length;
-  return colorPalette[index];
-};
+import { formatDate } from "@/utils/helper";
 
 function generateTimeSlots(startHour = 8, endHour = 20) {
   const slots = [];
@@ -50,6 +31,7 @@ export default function Scheduler({
   interviews,
   availabilities,
 }: SchedulerProps) {
+  console.log("availabilities: ", availabilities);
   const distinctDates = useMemo(() => {
     const dates = [
       ...new Set([
@@ -61,6 +43,7 @@ export default function Scheduler({
     ];
     return dates.sort();
   }, [interviews, availabilities]);
+  console.log(distinctDates);
 
   const timeSlots = generateTimeSlots(8, 20);
 
@@ -69,7 +52,7 @@ export default function Scheduler({
       <TabsList>
         {distinctDates.map((date) => (
           <TabsTrigger key={date} value={date}>
-            {format(new Date(date), "PPP")}
+            {formatDate(date)}
           </TabsTrigger>
         ))}
       </TabsList>
@@ -116,10 +99,8 @@ export default function Scheduler({
                     </div>
                     {timeSlots.map((slot) => {
                       const [hour, minute] = slot.split(":").map(Number);
-                      const slotStart = new Date(date + `T${slot}:00`);
-                      const slotEnd = new Date(
-                        slotStart.getTime() + 30 * 60000
-                      );
+                      const slotStart = parseISO(`${date}T${slot}:00Z`);
+                      const slotEnd = addMinutes(slotStart, 30); // Add 30 minutes to get slot end
 
                       // Filter availabilities for this rushee and time slot
                       const rusheeAvailabilities = availabilitiesForDay.filter(
@@ -135,6 +116,14 @@ export default function Scheduler({
                       );
 
                       const isAvailable = rusheeAvailabilities.length > 0;
+                      console.log(
+                        "Rushee",
+                        rushee.first_name,
+                        "is available for slot",
+                        slot,
+                        ":",
+                        isAvailable
+                      );
                       return (
                         <div
                           key={`${rushee.id}-${slot}`}
