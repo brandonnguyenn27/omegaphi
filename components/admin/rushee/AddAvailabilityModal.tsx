@@ -34,26 +34,10 @@ export default function AddAvailabilityModal({
   const [alertOpen, setAlertOpen] = useState(false);
 
   async function handleSubmit(formData: FormData) {
-    const date = formData.get("date") as string;
-    const startTime = formData.get("start_time") as string;
-    const endTime = formData.get("end_time") as string;
-
-    const startDateTime = new Date(`${date}T${startTime}:00Z`);
-    const endDateTime = new Date(`${date}T${endTime}:00Z`);
-
-    console.log(startDateTime, endDateTime);
-
-    if (startDateTime >= endDateTime) {
-      setAlertOpen(true);
-      return;
-    }
-    formData.set("start_time", startDateTime.toISOString());
-    formData.set("end_time", endDateTime.toISOString());
     formData.append("rushee_id", rusheeId);
 
     try {
       await addRusheeAvailability(formData);
-
       setOpen(false);
     } catch (error) {
       console.error(error);

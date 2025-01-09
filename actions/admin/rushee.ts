@@ -57,21 +57,36 @@ export async function addRusheeAvailability(formData: FormData) {
   const supabase = await createClient();
 
   const rushee_id = formData.get("rushee_id") as string;
+  const date = formData.get("date") as string;
   const start_time = formData.get("start_time") as string;
   const end_time = formData.get("end_time") as string;
 
-  if (!rushee_id || !start_time || !end_time) {
+  if (!rushee_id || !date || !start_time || !end_time) {
     throw new Error("Missing required fields");
   }
 
-  const { data, error } = await supabase
-    .from("rushee_availabilities")
-    .insert([{ rushee_id, start_time, end_time }]);
+  // Combine and validate times on the server
+  const startDateTime = new Date(`${date}T${start_time}:00Z`);
+  const endDateTime = new Date(`${date}T${end_time}:00Z`);
+
+  if (startDateTime >= endDateTime) {
+    throw new Error("Start time must be before end time");
+  }
+
+  // Insert into the database
+  const { data, error } = await supabase.from("rushee_availabilities").insert([
+    {
+      rushee_id,
+      start_time: startDateTime.toISOString(),
+      end_time: endDateTime.toISOString(),
+    },
+  ]);
 
   if (error) {
     throw new Error(error.message);
   }
 
+  // Revalidate the related path
   revalidatePath(`/admin/rushees/view?rusheeId=${rushee_id}`);
 
   return data;
