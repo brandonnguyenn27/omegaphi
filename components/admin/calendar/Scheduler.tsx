@@ -43,7 +43,6 @@ export default function Scheduler({
     ];
     return dates.sort();
   }, [interviews, availabilities]);
-  console.log(distinctDates);
 
   const timeSlots = generateTimeSlots(8, 20);
 
@@ -98,7 +97,6 @@ export default function Scheduler({
                       {rushee.first_name} {rushee.last_name}
                     </div>
                     {timeSlots.map((slot) => {
-                      const [hour, minute] = slot.split(":").map(Number);
                       const slotStart = parseISO(`${date}T${slot}:00Z`);
                       const slotEnd = addMinutes(slotStart, 30); // Add 30 minutes to get slot end
 
@@ -116,14 +114,7 @@ export default function Scheduler({
                       );
 
                       const isAvailable = rusheeAvailabilities.length > 0;
-                      console.log(
-                        "Rushee",
-                        rushee.first_name,
-                        "is available for slot",
-                        slot,
-                        ":",
-                        isAvailable
-                      );
+
                       return (
                         <div
                           key={`${rushee.id}-${slot}`}

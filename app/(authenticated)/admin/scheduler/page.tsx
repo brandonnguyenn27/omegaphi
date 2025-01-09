@@ -33,7 +33,7 @@ export default async function AdminCalendarPage() {
       <h1 className="text-xl font-semibold mb-4">Interview Scheduler</h1>
       <Scheduler
         interviews={interviews || []}
-        availabilities={availabilities || []}
+        availabilities={availabilities}
       />
     </section>
   );

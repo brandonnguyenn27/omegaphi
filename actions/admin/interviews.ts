@@ -1,6 +1,7 @@
 "use server";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function addInterviewDateAction(formData: FormData) {
   const supabase = await createClient();
@@ -23,15 +24,15 @@ export async function addInterviewDateAction(formData: FormData) {
   }
 
   // Insert the new interview date
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("interview_days")
     .insert([{ title, interview_date, start_time, end_time }]);
 
   if (error) {
     throw new Error(error.message);
   }
-
-  return data;
+  redirect("/admin/interview-dates");
+  return;
 }
 
 export async function deleteInterviewDateAction(interviewId: string) {
