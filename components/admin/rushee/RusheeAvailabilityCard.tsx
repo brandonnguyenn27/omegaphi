@@ -21,9 +21,11 @@ import {
 
 interface RusheeAvailabilityCardProps {
   availability: RusheeAvailability;
+  rusheeName?: string;
 }
 const RusheeAvailabilityCard = ({
   availability,
+  rusheeName,
 }: RusheeAvailabilityCardProps) => {
   const timeZone = "UTC";
   const [open, setOpen] = useState(false);
@@ -60,15 +62,17 @@ const RusheeAvailabilityCard = ({
   return (
     <Card key={availability.id} className="shadow-lg">
       <CardHeader>
+        {rusheeName && (
+          <h3 className="text-lg font-semibold mb-1">{rusheeName}</h3>
+        )}
         <h3 className="text-lg font-semibold">
-          Availability on{" "}
           {format(
             toZonedTime(new Date(availability.start_time), timeZone),
             "PPP"
           )}
         </h3>
       </CardHeader>
-      <div className="p-4">
+      <div className="p-4 ml-4">
         <p>
           <span className="font-medium">Start Time:</span>{" "}
           {format(

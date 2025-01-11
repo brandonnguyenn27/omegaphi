@@ -91,12 +91,12 @@ export async function addRusheeAvailability(formData: FormData) {
 
   return data;
 }
-export async function deleteRusheeAvailability(rusheeId: string) {
+export async function deleteRusheeAvailability(availability_id: string) {
   const supabase = await createClient();
   await supabase
     .from("rushee_availabilities")
     .delete()
-    .eq("rushee_id", rusheeId);
+    .eq("id ", availability_id);
 }
 
 export async function updateRusheeAvailability(

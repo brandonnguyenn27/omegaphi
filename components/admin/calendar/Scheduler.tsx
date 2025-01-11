@@ -3,8 +3,11 @@
 import React, { useMemo } from "react";
 import { format, addMinutes, parseISO } from "date-fns";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { InterviewDay, AvailabilityExtended } from "@/types/admin/types";
-import { Rushee } from "@/types/admin/types";
+import {
+  InterviewDay,
+  AvailabilityExtended,
+  Rushee,
+} from "@/types/admin/types";
 import { formatDate } from "@/utils/helper";
 
 function generateTimeSlots(startHour = 8, endHour = 20) {
@@ -47,103 +50,120 @@ export default function Scheduler({
   const timeSlots = generateTimeSlots(8, 20);
 
   return (
-    <Tabs defaultValue={distinctDates[0]}>
-      <TabsList>
-        {distinctDates.map((date) => (
-          <TabsTrigger key={date} value={date}>
-            {formatDate(date)}
-          </TabsTrigger>
-        ))}
-      </TabsList>
+    <div className="p-4">
+      <Tabs defaultValue={distinctDates[0]}>
+        <TabsList className="mb-4 space-x-2">
+          {distinctDates.map((date) => (
+            <TabsTrigger
+              key={date}
+              value={date}
+              className="rounded-md shadow-sm hover:bg-gray-200"
+            >
+              {formatDate(date)}
+            </TabsTrigger>
+          ))}
+        </TabsList>
 
-      {distinctDates.map((date) => {
-        const availabilitiesForDay = availabilities.filter(
-          (a) => format(parseISO(a.start_time), "yyyy-MM-dd") === date
-        );
-        const distinctRushees: Rushee[] = Array.from(
-          new Map(
-            availabilitiesForDay.map((a) => [
-              a.rushee_id,
-              { id: a.rushee_id, ...a.rushees },
-            ])
-          ).values()
-        );
+        {distinctDates.map((date) => {
+          const availabilitiesForDay = availabilities.filter(
+            (a) => format(parseISO(a.start_time), "yyyy-MM-dd") === date
+          );
+          const distinctRushees: Rushee[] = Array.from(
+            new Map(
+              availabilitiesForDay.map((a) => [
+                a.rushee_id,
+                { id: a.rushee_id, ...a.rushees },
+              ])
+            ).values()
+          );
 
-        return (
-          <TabsContent key={date} value={date}>
-            <div className="overflow-auto">
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: `200px repeat(${timeSlots.length}, minmax(50px, 1fr))`,
-                }}
-                className="border border-gray-300"
-              >
-                {/* Header Row */}
-                <div className="sticky top-0 bg-gray-100 border-b border-r border-gray-300" />
-                {timeSlots.map((slot) => (
+          return (
+            <TabsContent
+              key={date}
+              value={date}
+              className="rounded-md border border-gray-300 p-2 shadow-md"
+            >
+              <div className="overflow-auto">
+                <div
+                  className="grid auto-cols-fr"
+                  style={{
+                    gridTemplateColumns: `220px repeat(${timeSlots.length}, minmax(70px, 1fr))`,
+                  }}
+                >
                   <div
-                    key={slot}
-                    className="sticky top-0 bg-gray-100 border-b border-r border-gray-300 text-center text-xs p-1"
+                    className="sticky top-0 left-0 bg-gray-100 border-b border-r border-gray-300 z-30"
+                    style={{
+                      height: "40px", // Match the height of the header row
+                    }}
                   >
-                    {formatTimeSlotWithDateFns(slot)}
+                    {/* This can be blank or have a label */}
                   </div>
-                ))}
 
-                {/* Rushee Rows */}
-                {distinctRushees.map((rushee: Rushee) => (
-                  <React.Fragment key={rushee.id}>
-                    <div className="sticky left-0 bg-gray-100 border-r border-b border-gray-300 p-1 text-sm">
-                      {rushee.first_name} {rushee.last_name}
+                  {/* Time Header */}
+                  {timeSlots.map((slot) => (
+                    <div
+                      key={slot}
+                      className="sticky top-0 bg-gray-100 border-b border-gray-300 text-center text-xs p-2 z-10"
+                    >
+                      {formatTimeSlotWithDateFns(slot)}
                     </div>
-                    {timeSlots.map((slot) => {
-                      const slotStart = parseISO(`${date}T${slot}:00Z`);
-                      const slotEnd = addMinutes(slotStart, 30); // Add 30 minutes to get slot end
+                  ))}
 
-                      // Filter availabilities for this rushee and time slot
-                      const rusheeAvailabilities = availabilitiesForDay.filter(
-                        (a) => {
-                          if (a.rushee_id !== rushee.id) return false;
+                  {/* Rushee Rows */}
+                  {distinctRushees.map((rushee: Rushee) => (
+                    <React.Fragment key={rushee.id}>
+                      <div className="sticky left-0 bg-white border-r border-b border-gray-300 p-2 text-sm font-medium rounded-l-md z-20">
+                        {rushee.first_name} {rushee.last_name}
+                      </div>
+                      {timeSlots.map((slot) => {
+                        const slotStart = parseISO(`${date}T${slot}:00Z`);
+                        const slotEnd = addMinutes(slotStart, 30);
 
-                          const availStart = new Date(a.start_time);
-                          const availEnd = new Date(a.end_time);
+                        const rusheeAvailabilities =
+                          availabilitiesForDay.filter((a) => {
+                            if (a.rushee_id !== rushee.id) return false;
 
-                          // Check if availability overlaps with the time slot
-                          return availStart < slotEnd && availEnd > slotStart;
-                        }
-                      );
+                            const availStart = new Date(a.start_time);
+                            const availEnd = new Date(a.end_time);
 
-                      const isAvailable = rusheeAvailabilities.length > 0;
+                            return availStart < slotEnd && availEnd > slotStart;
+                          });
 
-                      return (
-                        <div
-                          key={`${rushee.id}-${slot}`}
-                          className={`border-b border-r border-gray-300 h-10 ${
-                            isAvailable ? `bg-red-500` : ""
-                          }`}
-                          title={
-                            isAvailable
-                              ? rusheeAvailabilities
-                                  .map(
-                                    (a) =>
-                                      `Available: ${format(
-                                        new Date(a.start_time),
-                                        "p"
-                                      )} - ${format(new Date(a.end_time), "p")}`
-                                  )
-                                  .join("\n")
-                              : ""
-                          }
-                        />
-                      );
-                    })}
-                  </React.Fragment>
-                ))}
+                        const isAvailable = rusheeAvailabilities.length > 0;
+
+                        return (
+                          <div
+                            key={`${rushee.id}-${slot}`}
+                            className={`border-b border-r border-gray-300 h-12 flex items-center justify-center text-xs ${
+                              isAvailable ? "bg-red-500 text-white" : "bg-white"
+                            }`}
+                            title={
+                              isAvailable
+                                ? rusheeAvailabilities
+                                    .map(
+                                      (a) =>
+                                        `Available: ${format(
+                                          new Date(a.start_time),
+                                          "p"
+                                        )} - ${format(
+                                          new Date(a.end_time),
+                                          "p"
+                                        )}`
+                                    )
+                                    .join("\n")
+                                : ""
+                            }
+                          />
+                        );
+                      })}
+                    </React.Fragment>
+                  ))}
+                </div>
               </div>
-            </div>
-          </TabsContent>
-        );
-      })}
-    </Tabs>
+            </TabsContent>
+          );
+        })}
+      </Tabs>
+    </div>
   );
 }
