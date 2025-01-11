@@ -11,6 +11,22 @@ import {
 import { formatDate } from "@/utils/helper";
 import TimeSlotCell from "./TimeSlotCell";
 
+interface UserAvailability {
+  id: string;
+
+  user_id: string;
+
+  start_time: string;
+
+  end_time: string;
+
+  profiles: {
+    first_name: string;
+
+    last_name: string;
+  };
+}
+
 function generateTimeSlots(startHour = 8, endHour = 20) {
   const slots = [];
   for (let hour = startHour; hour < endHour; hour++) {
@@ -29,13 +45,14 @@ function formatTimeSlotWithDateFns(timeSlot: string) {
 interface SchedulerProps {
   interviews: InterviewDay[];
   availabilities: AvailabilityExtended[];
+  userAvailabilities: UserAvailability[];
 }
 
 export default function Scheduler({
   interviews,
   availabilities,
+  userAvailabilities,
 }: SchedulerProps) {
-  console.log("availabilities: ", availabilities);
   const distinctDates = useMemo(() => {
     const dates = [
       ...new Set([
@@ -54,20 +71,25 @@ export default function Scheduler({
     <div className="p-4">
       <Tabs defaultValue={distinctDates[0]}>
         <TabsList className="mb-4 space-x-2">
-          {distinctDates.map((date) => (
-            <TabsTrigger
-              key={date}
-              value={date}
-              className="rounded-md shadow-sm hover:bg-gray-200"
-            >
-              {formatDate(date)}
-            </TabsTrigger>
-          ))}
+          {distinctDates.map((date) => {
+            return (
+              <TabsTrigger
+                key={date}
+                value={date}
+                className="rounded-md shadow-sm hover:bg-gray-200"
+              >
+                {formatDate(date)}
+              </TabsTrigger>
+            );
+          })}
         </TabsList>
 
         {distinctDates.map((date) => {
           const availabilitiesForDay = availabilities.filter(
             (a) => format(parseISO(a.start_time), "yyyy-MM-dd") === date
+          );
+          const userAvailabilitiesForDay = (userAvailabilities || []).filter(
+            (ua) => format(parseISO(ua.start_time), "yyyy-MM-dd") === date
           );
           const distinctRushees: Rushee[] = Array.from(
             new Map(
@@ -131,12 +153,18 @@ export default function Scheduler({
                           });
 
                         const isAvailable = rusheeAvailabilities.length > 0;
-
+                        const userAvailabilitiesForSlot =
+                          userAvailabilitiesForDay.filter((ua) => {
+                            const userStart = new Date(ua.start_time);
+                            const userEnd = new Date(ua.end_time);
+                            return userStart < slotEnd && userEnd > slotStart;
+                          });
                         return (
                           <TimeSlotCell
                             key={`${rushee.id}-${slot}`}
                             isAvailable={isAvailable}
                             rusheeAvailabilities={rusheeAvailabilities}
+                            userAvailabilities={userAvailabilitiesForSlot}
                             slot={slot}
                             rusheeId={rushee.id}
                           />

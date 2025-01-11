@@ -28,12 +28,28 @@ export default async function AdminCalendarPage() {
     )
     .order("start_time", { ascending: true });
 
+  const { data: userAvailabilities, error: userAvailError } = await supabase
+    .from("user_availabilities")
+    .select(
+      `
+      id,
+      user_id,
+      start_time,
+      end_time,
+      profiles ( first_name, last_name )
+    `
+    )
+    .order("start_time", { ascending: true });
+  if (userAvailError) console.error(userAvailError);
+  console.log(availabilities);
+
   return (
     <section className="p-4">
       <h1 className="text-xl font-semibold mb-4">Interview Scheduler</h1>
       <Scheduler
         interviews={interviews || []}
         availabilities={availabilities}
+        userAvailabilities={userAvailabilities}
       />
     </section>
   );

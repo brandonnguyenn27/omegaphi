@@ -6,9 +6,31 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 
+interface RusheeAvailability {
+  id: string;
+  start_time: string;
+  end_time: string;
+  rushees: {
+    first_name: string;
+    last_name: string;
+  };
+}
+
+interface UserAvailability {
+  id: string;
+  user_id: string;
+  start_time: string;
+  end_time: string;
+  profiles: {
+    first_name: string;
+    last_name: string;
+  };
+}
+
 interface TimeSlotCellProps {
   isAvailable: boolean;
-  rusheeAvailabilities: Array<{ start_time: string; end_time: string }>;
+  rusheeAvailabilities: RusheeAvailability[];
+  userAvailabilities: UserAvailability[];
   slot: string;
   rusheeId: string;
 }
@@ -16,6 +38,7 @@ interface TimeSlotCellProps {
 const TimeSlotCell: React.FC<TimeSlotCellProps> = ({
   isAvailable,
   rusheeAvailabilities,
+  userAvailabilities,
   slot,
   rusheeId,
 }) => {
@@ -32,7 +55,6 @@ const TimeSlotCell: React.FC<TimeSlotCellProps> = ({
     : "";
 
   if (isAvailable) {
-    // Render interactive cell with popover
     return (
       <Popover>
         <PopoverTrigger asChild>
@@ -43,17 +65,30 @@ const TimeSlotCell: React.FC<TimeSlotCellProps> = ({
           ></div>
         </PopoverTrigger>
         <PopoverContent className="p-4 max-w-sm">
-          <h3 className="font-semibold text-lg">Time Slot Details</h3>
-          <p>
-            This is a popover with details about availability for this time
-            slot.
-          </p>
+          <h3 className="font-semibold text-lg mb-2">Time Slot Details</h3>
+
+          {userAvailabilities.length > 0 ? (
+            <>
+              <p className="mb-4">Brothers available in this timeslot:</p>
+              <ul className="space-y-2">
+                {userAvailabilities.map((ua) => (
+                  <li key={ua.id} className="flex items-center space-x-2">
+                    <input type="checkbox" id={`user-${ua.id}`} />
+                    <label htmlFor={`user-${ua.id}`}>
+                      {ua.profiles.first_name} {ua.profiles.last_name}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <p>No brothers available in this timeslot.</p>
+          )}
         </PopoverContent>
       </Popover>
     );
   }
 
-  // Render static non-interactive cell
   return (
     <div
       key={`${rusheeId}-${slot}`}
