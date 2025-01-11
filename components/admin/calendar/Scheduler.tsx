@@ -9,6 +9,7 @@ import {
   Rushee,
 } from "@/types/admin/types";
 import { formatDate } from "@/utils/helper";
+import TimeSlotCell from "./TimeSlotCell";
 
 function generateTimeSlots(startHour = 8, endHour = 20) {
   const slots = [];
@@ -132,27 +133,12 @@ export default function Scheduler({
                         const isAvailable = rusheeAvailabilities.length > 0;
 
                         return (
-                          <div
+                          <TimeSlotCell
                             key={`${rushee.id}-${slot}`}
-                            className={`border-b border-r border-gray-300 h-12 flex items-center justify-center text-xs ${
-                              isAvailable ? "bg-red-500 text-white" : "bg-white"
-                            }`}
-                            title={
-                              isAvailable
-                                ? rusheeAvailabilities
-                                    .map(
-                                      (a) =>
-                                        `Available: ${format(
-                                          new Date(a.start_time),
-                                          "p"
-                                        )} - ${format(
-                                          new Date(a.end_time),
-                                          "p"
-                                        )}`
-                                    )
-                                    .join("\n")
-                                : ""
-                            }
+                            isAvailable={isAvailable}
+                            rusheeAvailabilities={rusheeAvailabilities}
+                            slot={slot}
+                            rusheeId={rushee.id}
                           />
                         );
                       })}
