@@ -39,10 +39,12 @@ export default async function RusheeDetails({
     <div>
       {rushee ? (
         <div>
-          <p className="font-bold text-2xl">
-            {rushee.first_name} {rushee.last_name}
-          </p>
-          <AddAvailabilityModal rusheeId={rusheeId} />
+          <div className="flex justify-between">
+            <p className="font-bold text-2xl mb-4">
+              {rushee.first_name} {rushee.last_name}
+            </p>
+            <AddAvailabilityModal rusheeId={rusheeId} />
+          </div>
           {availabilities?.map((availibility) => (
             <RusheeAvailabilityCard
               key={availibility.id}

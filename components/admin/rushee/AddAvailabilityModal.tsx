@@ -48,7 +48,7 @@ export default function AddAvailabilityModal({
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline" className="mr-2">
+          <Button variant="outline" className="mr-2 bg-blue-500 text-white">
             Add Availability
           </Button>
         </DialogTrigger>
