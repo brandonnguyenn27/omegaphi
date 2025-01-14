@@ -66,8 +66,10 @@ export default async function LoginPage() {
             </button>
           </div>
         </form>
+        <div className="mt-6 flex justify-center">
+          <GoogleSignIn />
+        </div>
       </div>
-      <GoogleSignIn />
     </div>
   );
 }
