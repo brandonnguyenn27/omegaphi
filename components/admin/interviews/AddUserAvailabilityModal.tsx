@@ -63,7 +63,7 @@ export default function AddUserAvailabilityModal({
           </DialogDescription>
         </DialogHeader>
         {error && <div className="text-red-500 mb-4">{error}</div>}
-        <UserAvailabilityForm submitAction={handleSubmit} userId={userId} />
+        <UserAvailabilityForm submitAction={handleSubmit} />
         <DialogFooter></DialogFooter>
       </DialogContent>
     </Dialog>

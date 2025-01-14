@@ -1,17 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 interface UserAvailabilityFormProps {
   submitAction: (formData: FormData) => Promise<void>;
-  userId: string;
 }
 
 export default function UserAvailabilityForm({
   submitAction,
-  userId,
 }: UserAvailabilityFormProps) {
   return (
     <form action={submitAction} className="space-y-4">
