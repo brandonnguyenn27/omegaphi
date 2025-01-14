@@ -27,6 +27,9 @@ export default function AddUserAvailabilityModal({
   async function handleSubmit(formData: FormData) {
     const startTime = formData.get("start_time") as string;
     const endTime = formData.get("end_time") as string;
+    const date = formData.get("date") as string;
+    const startDateTime = new Date(`${date}T${startTime}:00Z`).toISOString();
+    const endDateTime = new Date(`${date}T${endTime}:00Z`).toISOString();
 
     if (startTime >= endTime) {
       setError("Start time must be less than end time.");
@@ -34,6 +37,8 @@ export default function AddUserAvailabilityModal({
     }
 
     formData.append("user_id", userId);
+    formData.set("start_time", startDateTime);
+    formData.set("end_time", endDateTime);
 
     try {
       await addUserAvailabilityAction(formData);
