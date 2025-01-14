@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { login } from "@/actions/auth";
 import PasswordInput from "../../../components/login/PasswordInput";
+import { GoogleSignIn } from "@/components/auth/GoogleSignIn";
 
 export default async function LoginPage() {
   const supabase = await createClient();
@@ -11,7 +12,7 @@ export default async function LoginPage() {
   } = await supabase.auth.getSession();
 
   if (session) {
-    redirect("/dashboard");
+    redirect("/");
   }
 
   return (
@@ -66,6 +67,7 @@ export default async function LoginPage() {
           </div>
         </form>
       </div>
+      <GoogleSignIn />
     </div>
   );
 }

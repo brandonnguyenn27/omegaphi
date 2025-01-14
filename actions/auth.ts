@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
+import { Provider } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/server";
 
 export async function login(formData: FormData) {
@@ -48,3 +48,22 @@ export async function signOut() {
   await supabase.auth.signOut();
   redirect("/login");
 }
+
+const signInWith = async (provider: Provider) => {
+  const supabase = await createClient();
+  const auth_callback_url = `${process.env.SITE_URL}/auth/callback`;
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: { redirectTo: auth_callback_url },
+  });
+  if (error) {
+    console.error("Error signing in with OAuth", error);
+  }
+  console.log("OAuth initiation data:", data);
+  if (data.url) {
+    console.log("Redirecting user to:", data.url);
+    redirect(data.url);
+  }
+};
+
+export const signInWithGoogle = async () => signInWith("google");
