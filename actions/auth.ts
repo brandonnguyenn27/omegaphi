@@ -52,7 +52,7 @@ export async function signOut() {
 const signInWith = async (provider: Provider) => {
   const supabase = await createClient();
   const auth_callback_url = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`;
-
+  console.log("Using callback URL:", auth_callback_url);
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
     options: { redirectTo: auth_callback_url },
