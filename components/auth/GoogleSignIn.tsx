@@ -8,13 +8,13 @@ export const GoogleSignIn = () => {
   return (
     <div>
       <form action={signInWithGoogle}>
-        <button
+        <Button
           type="submit"
           style={{ all: "unset" }}
           className="cursor-pointer inline-block"
         >
           <GoogleButton />
-        </button>
+        </Button>
       </form>
     </div>
   );

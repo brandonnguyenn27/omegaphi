@@ -6,26 +6,11 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   InterviewDay,
   AvailabilityExtended,
+  UserAvailabilityExtended,
   Rushee,
 } from "@/types/admin/types";
 import { formatDate } from "@/utils/helper";
 import TimeSlotCell from "./TimeSlotCell";
-
-interface UserAvailability {
-  id: string;
-
-  user_id: string;
-
-  start_time: string;
-
-  end_time: string;
-
-  profiles: {
-    first_name: string;
-
-    last_name: string;
-  };
-}
 
 function generateTimeSlots(startHour = 8, endHour = 20) {
   const slots = [];
@@ -45,7 +30,7 @@ function formatTimeSlotWithDateFns(timeSlot: string) {
 interface SchedulerProps {
   interviews: InterviewDay[];
   availabilities: AvailabilityExtended[];
-  userAvailabilities: UserAvailability[];
+  userAvailabilities: UserAvailabilityExtended[];
 }
 
 export default function Scheduler({
@@ -57,9 +42,11 @@ export default function Scheduler({
     const dates = [
       ...new Set([
         ...interviews.map((day) => day.interview_date),
-        ...availabilities.map((a) =>
-          format(parseISO(a.start_time), "yyyy-MM-dd")
-        ),
+        ...(availabilities
+          ? availabilities.map((a) =>
+              format(parseISO(a.start_time), "yyyy-MM-dd")
+            )
+          : []),
       ]),
     ];
     return dates.sort();
@@ -85,7 +72,7 @@ export default function Scheduler({
         </TabsList>
 
         {distinctDates.map((date) => {
-          const availabilitiesForDay = availabilities.filter(
+          const availabilitiesForDay = (availabilities || []).filter(
             (a) => format(parseISO(a.start_time), "yyyy-MM-dd") === date
           );
           const userAvailabilitiesForDay = (userAvailabilities || []).filter(

@@ -60,7 +60,7 @@ const RusheeAvailabilityCard = ({
   };
 
   return (
-    <Card key={availability.id} className="shadow-lg w-1/2">
+    <Card key={availability.id} className="shadow-lg">
       <CardHeader>
         {rusheeName && (
           <h3 className="text-lg font-semibold mb-1">{rusheeName}</h3>

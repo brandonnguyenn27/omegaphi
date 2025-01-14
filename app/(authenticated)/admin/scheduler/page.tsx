@@ -1,5 +1,9 @@
 import { createClient } from "@/utils/supabase/server";
 import Scheduler from "@/components/admin/calendar/Scheduler";
+import {
+  AvailabilityExtended,
+  UserAvailabilityExtended,
+} from "@/types/admin/types";
 
 export default async function AdminCalendarPage() {
   const supabase = await createClient();
@@ -10,7 +14,7 @@ export default async function AdminCalendarPage() {
   if (error) {
     console.error(error);
   }
-  const { data: availabilities, error: availabilityError } = await supabase
+  const { data: rawAvailabilities, error: availabilityError } = await supabase
     .from("rushee_availabilities")
     .select(
       `
@@ -27,8 +31,16 @@ export default async function AdminCalendarPage() {
   `
     )
     .order("start_time", { ascending: true });
+  if (availabilityError) console.error(availabilityError);
 
-  const { data: userAvailabilities, error: userAvailError } = await supabase
+  const availabilities: AvailabilityExtended[] = (rawAvailabilities || []).map(
+    (a) => ({
+      ...a,
+      rushees: Array.isArray(a.rushees) ? a.rushees[0] : a.rushees,
+    })
+  );
+
+  const { data: rawUserAvailabilities, error: userAvailError } = await supabase
     .from("user_availabilities")
     .select(
       `
@@ -41,15 +53,20 @@ export default async function AdminCalendarPage() {
     )
     .order("start_time", { ascending: true });
   if (userAvailError) console.error(userAvailError);
-  console.log(availabilities);
+  const userAvailabilities: UserAvailabilityExtended[] = (
+    rawUserAvailabilities || []
+  ).map((ua) => ({
+    ...ua,
+    profiles: Array.isArray(ua.profiles) ? ua.profiles[0] : ua.profiles,
+  }));
 
   return (
     <section className="p-4">
       <h1 className="text-xl font-semibold mb-4">Interview Scheduler</h1>
       <Scheduler
         interviews={interviews || []}
-        availabilities={availabilities}
-        userAvailabilities={userAvailabilities}
+        availabilities={availabilities || []}
+        userAvailabilities={userAvailabilities || []}
       />
     </section>
   );

@@ -46,6 +46,21 @@ export type UserAvailability = {
   updated_at?: string;
 };
 
+export type UserAvailabilityExtended = {
+  id: string;
+  user_id: string;
+  start_time: string;
+  end_time: string;
+  interview_day_id?: string;
+  created_at?: string;
+  updated_at?: string;
+
+  profiles: {
+    first_name: string;
+    last_name: string;
+  };
+};
+
 export type Availability = {
   id: string;
   rushee_id: string;
