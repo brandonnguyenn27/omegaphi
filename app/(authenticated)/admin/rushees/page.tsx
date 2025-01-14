@@ -1,30 +1,13 @@
 import { createClient } from "@/utils/supabase/server";
-import SortDropdown from "@/components/admin/rushee/SortDropdown";
-
 import AddRusheeModal from "./AddRusheeModal";
 import RusheeCard from "@/components/admin/rushee/RusheeCard";
-interface SortOption {
-  field: string;
-  direction: "asc" | "desc";
-}
 import RusheeAvailabilityCard from "@/components/admin/rushee/RusheeAvailabilityCard";
-export default async function RusheesPage({
-  searchParams,
-}: {
-  searchParams?: { sort?: string };
-}) {
-  const supabase = await createClient();
-  const sortOption: SortOption =
-    searchParams?.sort === "name"
-      ? { field: "first_name", direction: "asc" }
-      : searchParams?.sort === "oldest"
-      ? { field: "created_at", direction: "asc" }
-      : { field: "created_at", direction: "desc" };
 
-  const { data: rushees, error } = await supabase
-    .from("rushees")
-    .select("*")
-    .order(sortOption.field, { ascending: sortOption.direction === "asc" });
+export default async function RusheesPage() {
+  const supabase = await createClient();
+
+  // Fetch all rushees without sorting
+  const { data: rushees, error } = await supabase.from("rushees").select("*");
 
   if (error) {
     console.error("Error fetching rushees:", error);
@@ -42,7 +25,7 @@ export default async function RusheesPage({
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">All Rushees</h1>
           <div className="flex items-center gap-4">
-            <SortDropdown />
+            {/* Removed SortDropdown */}
             <AddRusheeModal />
           </div>
         </div>
