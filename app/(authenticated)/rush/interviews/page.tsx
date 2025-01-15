@@ -38,11 +38,13 @@ export default async function InterviewPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Interviews</h1>
-      <AddUserAvailabilityModal
-        userId={userId || ""}
-        interview_dates={dates?.map((date) => date.interview_date) || []}
-      />
+      <div className="flex mb-8">
+        <h1 className="text-2xl font-bold mr-8">Interviews</h1>
+        <AddUserAvailabilityModal
+          userId={userId || ""}
+          interview_dates={dates?.map((date) => date.interview_date) || []}
+        />
+      </div>
       <div className="flex justify-center items-center w-full">
         <Tabs defaultValue="interview1" className="w-3/4 ">
           <TabsList
@@ -79,7 +81,7 @@ export default async function InterviewPage() {
         </Tabs>
       </div>
       <div>
-        <h1 className="text-2xl font-bold">Your Availabilities</h1>
+        <h1 className="text-2xl font-bold mt-8 mb-2">Your Availabilities</h1>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {userAvailabilities?.map((availability) => (
             <div
