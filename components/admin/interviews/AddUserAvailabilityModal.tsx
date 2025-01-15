@@ -16,10 +16,12 @@ import UserAvailabilityForm from "./InterviewAvailabilityForm";
 
 interface AddUserAvailabilityModalProps {
   userId: string;
+  interview_dates: string[];
 }
 
 export default function AddUserAvailabilityModal({
   userId,
+  interview_dates,
 }: AddUserAvailabilityModalProps) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
@@ -63,7 +65,10 @@ export default function AddUserAvailabilityModal({
           </DialogDescription>
         </DialogHeader>
         {error && <div className="text-red-500 mb-4">{error}</div>}
-        <UserAvailabilityForm submitAction={handleSubmit} />
+        <UserAvailabilityForm
+          submitAction={handleSubmit}
+          interview_dates={interview_dates}
+        />
         <DialogFooter></DialogFooter>
       </DialogContent>
     </Dialog>

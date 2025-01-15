@@ -9,27 +9,40 @@ export default async function InterviewPage() {
   const { data: user } = await supabase.auth.getUser();
   const userId = user?.user?.id;
 
-  const { data: dates } = await supabase
+  const { data: dates, error: datesError } = await supabase
     .from("interview_days")
     .select("id, interview_date")
     .order("interview_date");
+  if (datesError) {
+    console.error(datesError);
+  }
 
-  const { data: interviews } = await supabase
+  const { data: interviews, error: interviewsError } = await supabase
     .from("interviews")
     .select("*")
     .eq("user_id", userId);
+  if (interviewsError) {
+    console.error(interviewsError);
+  }
 
-  const { data: userAvailabilities } = await supabase
-    .from("user_availabilities")
-    .select("*")
-    .eq("user_id", userId);
+  const { data: userAvailabilities, error: userAvailabilitiesError } =
+    await supabase
+      .from("user_availabilities")
+      .select("*")
+      .eq("user_id", userId);
+  if (userAvailabilitiesError) {
+    console.error(userAvailabilitiesError);
+  }
 
   const timeZone = "UTC";
 
   return (
     <div>
       <h1 className="text-2xl font-bold">Interviews</h1>
-      <AddUserAvailabilityModal userId={userId || ""} />
+      <AddUserAvailabilityModal
+        userId={userId || ""}
+        interview_dates={dates?.map((date) => date.interview_date) || []}
+      />
       <div className="flex justify-center items-center w-full">
         <Tabs defaultValue="interview1" className="w-3/4 ">
           <TabsList

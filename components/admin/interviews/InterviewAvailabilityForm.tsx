@@ -2,13 +2,23 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { formatDate } from "@/utils/helper";
 
 interface UserAvailabilityFormProps {
   submitAction: (formData: FormData) => Promise<void>;
+  interview_dates: string[];
 }
 
 export default function UserAvailabilityForm({
   submitAction,
+  interview_dates,
 }: UserAvailabilityFormProps) {
   return (
     <form action={submitAction} className="space-y-4">
@@ -16,7 +26,18 @@ export default function UserAvailabilityForm({
         <label className="block font-medium mb-1">
           Date <span className="text-red-500">*</span>
         </label>
-        <Input type="date" name="date" required />
+        <Select name="date" required>
+          <SelectTrigger>
+            <SelectValue placeholder="Select a date" />
+          </SelectTrigger>
+          <SelectContent>
+            {interview_dates.map((date) => (
+              <SelectItem key={date} value={date}>
+                {formatDate(date)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div>
         <label className="block mb-2">
