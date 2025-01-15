@@ -2,10 +2,8 @@ import { createClient } from "@/utils/supabase/server";
 import React from "react";
 
 const ProfilePage: React.FC = async () => {
-  // Initialize Supabase server client
   const supabase = await createClient();
 
-  // Retrieve the currently authenticated user
   const {
     data: { user },
     error: userError,
@@ -17,7 +15,6 @@ const ProfilePage: React.FC = async () => {
 
   const { id: userId, email } = user;
 
-  // Fetch profile details from 'profiles' table for the current user
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("first_name, last_name")
@@ -30,18 +27,37 @@ const ProfilePage: React.FC = async () => {
   }
 
   return (
-    <div>
-      <h1>User Profile</h1>
-      <p>
-        <strong>Email:</strong> {email}
-      </p>
-      <p>
-        <strong>First Name:</strong> {profile?.first_name || "Not provided"}
-      </p>
-      <p>
-        <strong>Last Name:</strong> {profile?.last_name || "Not provided"}
-      </p>
-      {/* Future: Add UI for editing first and last name here */}
+    <div className="">
+      <div className="bg-white shadow-md rounded-lg w-full max-w-md p-6">
+        <h1 className="text-2xl font-semibold mb-4">User Profile</h1>
+
+        <div className="space-y-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Email:
+            </label>
+            <p className="mt-1 text-gray-900">{email}</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              First Name:
+            </label>
+            <p className="mt-1 text-gray-900">
+              {profile?.first_name || "Not provided"}
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Last Name:
+            </label>
+            <p className="mt-1 text-gray-900">
+              {profile?.last_name || "Not provided"}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
