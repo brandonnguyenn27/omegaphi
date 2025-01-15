@@ -7,14 +7,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // Adjust to your shadcn setup
+} from "@/components/ui/select";
 
 export default function SortDropdown() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentSort = searchParams.get("sort") || "newest";
 
-  // Handle sort selection
   const handleSortChange = (value: string) => {
     const params = new URLSearchParams(searchParams);
     params.set("sort", value);
