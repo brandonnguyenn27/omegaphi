@@ -4,11 +4,9 @@ import RusheeCard from "@/components/admin/rushee/RusheeCard";
 import RusheeAvailabilityCard from "@/components/admin/rushee/RusheeAvailabilityCard";
 import SortDropdown from "@/components/admin/rushee/SortDropdown";
 
-type Params = Promise<{}>;
 type SearchParams = Promise<{ sort?: string }>;
 
 interface RusheesPageProps {
-  params: Params;
   searchParams: SearchParams;
 }
 
