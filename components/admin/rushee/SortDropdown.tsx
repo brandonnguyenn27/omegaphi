@@ -1,34 +1,40 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import {
   Select,
-  SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectContent,
+  SelectItem,
 } from "@/components/ui/select";
 
 export default function SortDropdown() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+
   const currentSort = searchParams.get("sort") || "newest";
 
-  const handleSortChange = (value: string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("sort", value);
-    router.push(`?${params.toString()}`);
+  const handleChange = (newSort: string) => {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    if (newSort && newSort !== "newest") {
+      newSearchParams.set("sort", newSort);
+    } else {
+      newSearchParams.delete("sort");
+    }
+    router.push(`${pathname}?${newSearchParams.toString()}`);
   };
 
   return (
-    <Select onValueChange={handleSortChange} defaultValue={currentSort}>
-      <SelectTrigger className="w-[200px]">
-        <SelectValue placeholder="Sort by" />
+    <Select value={currentSort} onValueChange={handleChange}>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Sort by..." />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="name">Name (A-Z)</SelectItem>
-        <SelectItem value="newest">Date Added (Newest)</SelectItem>
-        <SelectItem value="oldest">Date Added (Oldest)</SelectItem>
+        <SelectItem value="newest">Newest</SelectItem>
+        <SelectItem value="oldest">Oldest</SelectItem>
+        <SelectItem value="name">Name</SelectItem>
       </SelectContent>
     </Select>
   );

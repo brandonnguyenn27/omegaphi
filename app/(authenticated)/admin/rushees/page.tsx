@@ -18,7 +18,6 @@ interface SortOption {
 }
 
 export default async function RusheesPage(props: RusheesPageProps) {
-  const params = await props.params;
   const searchParams = await props.searchParams;
 
   const sortOption: SortOption =
