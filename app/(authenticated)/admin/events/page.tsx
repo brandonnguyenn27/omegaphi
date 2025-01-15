@@ -14,8 +14,8 @@ export default async function AdminEventsPage() {
 
   return (
     <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Event Management</h1>
+      <div className="flex items-center mb-6">
+        <h1 className="text-2xl font-bold mr-4">Event Management</h1>
         {isUserAdmin && <AddEventModal />}
       </div>
       <EventList events={events || []} isAdmin={isUserAdmin} />

@@ -15,8 +15,8 @@ export default async function InterviewDatePage() {
 
   return (
     <div>
-      <div className="flex justify-self-auto  mb-4">
-        <h1 className="text-xl font-semibold mb-4 mr-12">Interview Dates</h1>
+      <div className="flex items-center  mb-4">
+        <h1 className="text-xl font-semibold  mr-4">Interview Dates</h1>
         <AddInterviewDateModal />
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

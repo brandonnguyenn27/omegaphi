@@ -6,7 +6,6 @@ import RusheeAvailabilityCard from "@/components/admin/rushee/RusheeAvailability
 export default async function RusheesPage() {
   const supabase = await createClient();
 
-  // Fetch all rushees without sorting
   const { data: rushees, error } = await supabase.from("rushees").select("*");
 
   if (error) {
@@ -22,10 +21,9 @@ export default async function RusheesPage() {
   return (
     <>
       <section className="p-4">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">All Rushees</h1>
+        <div className="flex items-center mb-6">
+          <h1 className="text-2xl font-bold mr-4">All Rushees</h1>
           <div className="flex items-center gap-4">
-            {/* Removed SortDropdown */}
             <AddRusheeModal />
           </div>
         </div>
