@@ -45,8 +45,9 @@ export default function AddUserAvailabilityModal({
     try {
       await addUserAvailabilityAction(formData);
       setOpen(false);
-    } catch {
-      setError("An error occurred while adding availability.");
+      setError("");
+    } catch (err: any) {
+      setError(err?.message || "An unexpected error occurred.");
     }
   }
 

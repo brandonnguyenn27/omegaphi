@@ -53,7 +53,6 @@ export async function addUserAvailabilityAction(formData: FormData) {
   const end_time = formData.get("end_time") as string;
   const interview_date = formData.get("date") as string;
 
-  // Look up the interview day ID based on the date
   const { data: interviewDays, error: lookupError } = await supabase
     .from("interview_days")
     .select("id")
@@ -62,14 +61,41 @@ export async function addUserAvailabilityAction(formData: FormData) {
   if (lookupError) {
     throw new Error(lookupError.message);
   }
-
   if (!interviewDays || interviewDays.length === 0) {
     throw new Error("No interview day found for the specified date.");
   }
 
   const interview_day_id = interviewDays[0].id;
 
-  // Insert the user availability
+  const { data: existingAvailabilities, error: fetchError } = await supabase
+    .from("user_availabilities")
+    .select("start_time, end_time")
+    .eq("user_id", user_id)
+    .eq("interview_day_id", interview_day_id);
+
+  if (fetchError) {
+    throw new Error(fetchError.message);
+  }
+  console.log(existingAvailabilities);
+
+  const newStart = new Date(String(start_time));
+  const newEnd = new Date(String(end_time));
+
+  for (const availability of existingAvailabilities || []) {
+    const existingStart = new Date(String(availability.start_time));
+    const existingEnd = new Date(String(availability.end_time));
+
+    console.log("Comparing new availability: ", newStart, newEnd);
+    console.log("With existing availability: ", existingStart, existingEnd);
+
+    if (newStart < existingEnd && existingStart < newEnd) {
+      console.log("Overlapping availability found: ", availability);
+      throw new Error(
+        "The provided time range overlaps with an existing availability."
+      );
+    }
+  }
+
   const { data, error } = await supabase
     .from("user_availabilities")
     .insert([{ user_id, start_time, end_time, interview_day_id }]);
