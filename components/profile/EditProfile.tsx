@@ -1,4 +1,3 @@
-// File: src/components/EditProfileModal.tsx
 "use client";
 
 import React, { useState } from "react";

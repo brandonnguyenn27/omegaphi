@@ -29,7 +29,7 @@ const ProfilePage: React.FC = async () => {
   }
 
   return (
-    <div className="">
+    <div className="flex justify-center">
       <div className="bg-white shadow-md rounded-lg w-full max-w-md p-6">
         <h1 className="text-2xl font-semibold mb-4">User Profile</h1>
         <div className="space-y-3">
