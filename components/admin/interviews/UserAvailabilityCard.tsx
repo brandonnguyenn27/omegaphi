@@ -1,31 +1,29 @@
-import { Button } from "@/components/ui/button";
 import { UserAvailability } from "@/types/admin/types";
 import { format } from "date-fns";
-
+import { toZonedTime } from "date-fns-tz";
+import DeleteUserAvailabilityButton from "./DeleteUserAvailabilityButton";
 interface UserAvailabilityCardProps {
   availability: UserAvailability;
-  onDelete: (id: string) => Promise<void>;
 }
 
 export default function UserAvailabilityCard({
   availability,
-  onDelete,
 }: UserAvailabilityCardProps) {
-  const startTime = new Date(availability.start_time);
-  const endTime = new Date(availability.end_time);
-  const formattedStartTime = format(startTime, "HH:mm");
-  const formattedEndTime = format(endTime, "HH:mm");
+  const timeZone = "UTC";
 
   return (
-    <div className="border p-4 rounded">
-      <p>
-        Time: {formattedStartTime} - {formattedEndTime}
+    <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200">
+      <p className="text-gray-600">
+        {format(
+          toZonedTime(new Date(availability.start_time), timeZone),
+          "PPP"
+        )}
       </p>
-      <div className="mt-2 space-x-2">
-        <Button variant="destructive" onClick={() => onDelete(availability.id)}>
-          Delete
-        </Button>
-      </div>
+      <p className="text-lg font-semibold">
+        {format(toZonedTime(new Date(availability.start_time), timeZone), "p")}{" "}
+        - {format(toZonedTime(new Date(availability.end_time), timeZone), "p")}
+      </p>
+      <DeleteUserAvailabilityButton availability_id={availability.id} />
     </div>
   );
 }

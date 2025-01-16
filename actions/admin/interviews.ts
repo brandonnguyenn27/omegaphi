@@ -91,4 +91,5 @@ export async function deleteUserAvailabilityAction(availabilityId: string) {
   if (error) {
     throw new Error(error.message);
   }
+  revalidatePath("/admin/interviews");
 }

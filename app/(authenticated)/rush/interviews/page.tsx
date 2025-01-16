@@ -3,6 +3,7 @@ import InterviewCard from "@/components/interviews/InterviewCard";
 import { createClient } from "@/utils/supabase/server";
 import { formatDate } from "@/utils/helper";
 import { format, toZonedTime } from "date-fns-tz";
+import UserAvailabilityCard from "@/components/admin/interviews/UserAvailabilityCard";
 import AddUserAvailabilityModal from "@/components/admin/interviews/AddUserAvailabilityModal";
 export default async function InterviewPage() {
   const supabase = await createClient();
@@ -84,28 +85,10 @@ export default async function InterviewPage() {
         <h1 className="text-2xl font-bold mt-8 mb-2">Your Availabilities</h1>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {userAvailabilities?.map((availability) => (
-            <div
+            <UserAvailabilityCard
               key={availability.id}
-              className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
-            >
-              <p className="text-gray-600">
-                {format(
-                  toZonedTime(new Date(availability.start_time), timeZone),
-                  "PPP"
-                )}
-              </p>
-              <p className="text-lg font-semibold">
-                {format(
-                  toZonedTime(new Date(availability.start_time), timeZone),
-                  "p"
-                )}{" "}
-                -{" "}
-                {format(
-                  toZonedTime(new Date(availability.end_time), timeZone),
-                  "p"
-                )}
-              </p>
-            </div>
+              availability={availability}
+            />
           ))}
         </div>
       </div>
