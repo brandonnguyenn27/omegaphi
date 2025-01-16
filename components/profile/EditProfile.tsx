@@ -35,8 +35,10 @@ export default function EditProfileModal({
       await updateProfileAction(formData);
       setOpen(false);
       setError("");
-    } catch (err: any) {
-      setError(err?.message || "Error updating profile.");
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err?.message || "Error updating profile.");
+      }
     }
   }
 

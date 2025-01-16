@@ -2,7 +2,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import InterviewCard from "@/components/interviews/InterviewCard";
 import { createClient } from "@/utils/supabase/server";
 import { formatDate } from "@/utils/helper";
-import { format, toZonedTime } from "date-fns-tz";
 import UserAvailabilityCard from "@/components/admin/interviews/UserAvailabilityCard";
 import AddUserAvailabilityModal from "@/components/admin/interviews/AddUserAvailabilityModal";
 export default async function InterviewPage() {
@@ -34,8 +33,6 @@ export default async function InterviewPage() {
   if (userAvailabilitiesError) {
     console.error(userAvailabilitiesError);
   }
-
-  const timeZone = "UTC";
 
   return (
     <div>
