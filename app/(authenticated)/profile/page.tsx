@@ -1,4 +1,3 @@
-// File: src/app/profile/page.tsx (or similar path)
 import React from "react";
 import { createClient } from "@/utils/supabase/server";
 import EditProfileModal from "@/components/profile/EditProfile";
