@@ -6,6 +6,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { formatDateTime } from "@/utils/helper";
 
 type InterviewCardProps = {
   interviews: Interview[];
@@ -34,8 +35,8 @@ export default function InterviewCard({ interviews }: InterviewCardProps) {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p>Start Time: {new Date(interview.start_time).toLocaleString()}</p>
-            <p>End Time: {new Date(interview.end_time).toLocaleString()}</p>
+            <p>Start Time: {formatDateTime(interview.start_time)}</p>
+            <p>End Time: {formatDateTime(interview.end_time)}</p>
           </CardContent>
         </Card>
       ))}

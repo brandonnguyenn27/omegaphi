@@ -55,11 +55,7 @@ export default async function InterviewPage() {
           >
             {dates?.map((date, index) => {
               return (
-                <TabsTrigger
-                  asChild
-                  key={index}
-                  value={`interview${index + 1}`}
-                >
+                <TabsTrigger key={index} value={`interview${index + 1}`}>
                   <div>{formatDate(date.interview_date)}</div>
                 </TabsTrigger>
               );

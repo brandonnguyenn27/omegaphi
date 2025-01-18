@@ -20,3 +20,12 @@ export const formatTime = (timeStr: string | null | undefined) => {
     hour12: true,
   });
 };
+
+export const formatDateTime = (dateString: string) => {
+  const options: Intl.DateTimeFormatOptions = {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true, // Change to false for 24-hour format
+  };
+  return new Date(dateString).toLocaleString(undefined, options);
+};
