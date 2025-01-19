@@ -1,6 +1,6 @@
 # Omega Phi 
-Making a membership management application for Alpha Kappa Psi, Omega Phi Chapter @ SJSU
-
+Membership management application for Alpha Kappa Psi, Omega Phi Chapter @ SJSU
+Interview scheduling, rushee management, event dashboard
 
 
 
