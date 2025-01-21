@@ -58,7 +58,7 @@ export default async function RusheesPage(props: {
     .select("*, rushees(first_name, last_name)");
 
   if (availabilitySortOption.field.startsWith("rushees.")) {
-    const [_, relatedField] = availabilitySortOption.field.split(".");
+    const relatedField = availabilitySortOption.field.split(".")[1];
     availabilityQuery = availabilityQuery.order(relatedField, {
       foreignTable: "rushees",
       ascending: availabilitySortOption.ascending,
@@ -99,7 +99,7 @@ export default async function RusheesPage(props: {
         </div>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {rusheeAvailabilities?.map((availability) => {
-            const { rushees: rushee, start_time, end_time, id } = availability;
+            const { rushees: rushee, id } = availability;
             const rusheeName = rushee
               ? `${rushee.first_name} ${rushee.last_name}`
               : "Unknown";
