@@ -32,6 +32,24 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/auth/auth-code-error`);
   }
 
+  const { data: whitelist, error: whitelistError } = await supabase
+    .from("email_whitelist")
+    .select("email")
+    .eq("email", user.email)
+    .single();
+
+  if (whitelistError || !whitelist) {
+    console.error(
+      "Unauthorized access: User's email is not in the whitelist.",
+      whitelistError
+    );
+    const { error: signOutError } = await supabase.auth.signOut();
+    if (signOutError) {
+      console.error("Error signing out unauthorized user:", signOutError);
+    }
+    return NextResponse.redirect(`${origin}/auth/unauthorized`);
+  }
+
   // Parse full_name from user_metadata
   const fullName: string | undefined = user.user_metadata?.full_name;
   let given_name: string | undefined;
