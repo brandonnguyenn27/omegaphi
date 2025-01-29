@@ -59,6 +59,11 @@ const items: SidebarItem[] = [
         url: "/admin/events",
         roles: ["admin"],
       },
+      {
+        title: "Whitelist",
+        url: "/admin/whitelist",
+        roles: ["admin"],
+      },
     ],
   },
 ];
