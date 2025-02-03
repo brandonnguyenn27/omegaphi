@@ -12,7 +12,7 @@ import {
 import { formatDate } from "@/utils/helper";
 import TimeSlotCell from "./TimeSlotCell";
 
-function generateTimeSlots(startHour = 8, endHour = 20) {
+function generateTimeSlots(startHour: number, endHour: number) {
   const slots = [];
   for (let hour = startHour; hour < endHour; hour++) {
     slots.push(`${hour}:00`);
@@ -23,9 +23,15 @@ function generateTimeSlots(startHour = 8, endHour = 20) {
 
 function formatTimeSlotWithDateFns(timeSlot: string) {
   const [hour, minute] = timeSlot.split(":");
-  const tempDate = new Date(2024, 0, 1, +hour, +minute);
+  const tempDate = new Date(2025, 0, 1, +hour, +minute);
   return format(tempDate, "h:mm a");
 }
+const padTime = (time: string) => {
+  const [hours, minutes] = time.split(":").map(Number);
+  const paddedHours = hours < 10 ? `0${hours}` : `${hours}`;
+  const paddedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+  return `${paddedHours}:${paddedMinutes}`;
+};
 
 interface SchedulerProps {
   interviews: InterviewDay[];
@@ -38,6 +44,7 @@ export default function Scheduler({
   availabilities,
   userAvailabilities,
 }: SchedulerProps) {
+  // Should just change this by passing in interview_dates from database. Unnecessary to calculate it here.
   const distinctDates = useMemo(() => {
     const dates = [
       ...new Set([
@@ -52,7 +59,7 @@ export default function Scheduler({
     return dates.sort();
   }, [interviews, availabilities]);
 
-  const timeSlots = generateTimeSlots(8, 20);
+  const timeSlots = generateTimeSlots(9, 20);
 
   return (
     <div className="p-4">
@@ -75,6 +82,7 @@ export default function Scheduler({
           const availabilitiesForDay = (availabilities || []).filter(
             (a) => format(parseISO(a.start_time), "yyyy-MM-dd") === date
           );
+
           const userAvailabilitiesForDay = (userAvailabilities || []).filter(
             (ua) => format(parseISO(ua.start_time), "yyyy-MM-dd") === date
           );
@@ -103,13 +111,10 @@ export default function Scheduler({
                   <div
                     className="sticky top-0 left-0 bg-gray-100 border-b border-r border-gray-300 z-30"
                     style={{
-                      height: "40px", // Match the height of the header row
+                      height: "40px",
                     }}
-                  >
-                    {/* This can be blank or have a label */}
-                  </div>
+                  ></div>
 
-                  {/* Time Header */}
                   {timeSlots.map((slot) => (
                     <div
                       key={slot}
@@ -119,14 +124,15 @@ export default function Scheduler({
                     </div>
                   ))}
 
-                  {/* Rushee Rows */}
                   {distinctRushees.map((rushee: Rushee) => (
                     <React.Fragment key={rushee.id}>
                       <div className="sticky left-0 bg-white border-r border-b border-gray-300 p-2 text-sm font-medium rounded-l-md z-20">
                         {rushee.first_name} {rushee.last_name}
                       </div>
                       {timeSlots.map((slot) => {
-                        const slotStart = parseISO(`${date}T${slot}:00Z`);
+                        const paddedSlot = padTime(slot);
+                        const slotStart = parseISO(`${date}T${paddedSlot}:00Z`);
+
                         const slotEnd = addMinutes(slotStart, 30);
 
                         const rusheeAvailabilities =

@@ -68,6 +68,7 @@ const TimeSlotCell: React.FC<TimeSlotCellProps> = ({
           <h3 className="font-semibold text-lg mb-2">Time Slot Details</h3>
 
           {userAvailabilities.length > 0 ? (
+            // This should be a form with checkboxes for each available user for that time slot. The user should be able to select 2 users required. A submit button should be present to submit the form.
             <>
               <p className="mb-4">Brothers available in this timeslot:</p>
               <ul className="space-y-2">
