@@ -20,15 +20,25 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { formatDate } from "@/utils/helper";
 import { Input } from "@/components/ui/input";
 
 interface AddAvailabilityModalProps {
   rusheeId: string;
+  interview_dates: string[];
 }
 
 export default function AddAvailabilityModal({
   rusheeId,
+  interview_dates,
 }: AddAvailabilityModalProps) {
   const [open, setOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
@@ -61,8 +71,21 @@ export default function AddAvailabilityModal({
           </DialogHeader>
           <form action={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium">Date</label>
-              <Input type="date" name="date" required />
+              <label className="block font-medium mb-1">
+                Date <span className="text-red-500">*</span>
+              </label>
+              <Select name="date" required>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a date" />
+                </SelectTrigger>
+                <SelectContent>
+                  {interview_dates.map((date) => (
+                    <SelectItem key={date} value={date}>
+                      {formatDate(date)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <label className="block text-sm font-medium">Start Time</label>

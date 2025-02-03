@@ -34,7 +34,15 @@ export default async function RusheeDetails({
 }: {
   rusheeId: string;
 }) {
+  const supabase = await createClient();
   const { rushee, availabilities } = await fetchRusheeData(rusheeId);
+  const { data: interview_dates, error: datesError } = await supabase
+    .from("interview_days")
+    .select("id, interview_date")
+    .order("interview_date");
+  if (datesError) {
+    console.error(datesError);
+  }
   return (
     <div>
       {rushee ? (
@@ -43,7 +51,12 @@ export default async function RusheeDetails({
             <p className="font-bold text-2xl mb-4">
               {rushee.first_name} {rushee.last_name}
             </p>
-            <AddAvailabilityModal rusheeId={rusheeId} />
+            <AddAvailabilityModal
+              rusheeId={rusheeId}
+              interview_dates={
+                interview_dates?.map((date) => date.interview_date) || []
+              }
+            />
           </div>
           {availabilities?.map((availibility) => (
             <RusheeAvailabilityCard
