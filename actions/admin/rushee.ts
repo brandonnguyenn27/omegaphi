@@ -97,6 +97,7 @@ export async function deleteRusheeAvailability(availability_id: string) {
     .from("rushee_availabilities")
     .delete()
     .eq("id ", availability_id);
+  revalidatePath(`/admin/rushees`);
 }
 
 export async function updateRusheeAvailability(
