@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useMemo } from "react";
+import React from "react";
 import { format, addMinutes, parseISO } from "date-fns";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -44,20 +42,7 @@ export default function Scheduler({
   availabilities,
   userAvailabilities,
 }: SchedulerProps) {
-  // Should just change this by passing in interview_dates from database. Unnecessary to calculate it here.
-  const distinctDates = useMemo(() => {
-    const dates = [
-      ...new Set([
-        ...interviews.map((day) => day.interview_date),
-        ...(availabilities
-          ? availabilities.map((a) =>
-              format(parseISO(a.start_time), "yyyy-MM-dd")
-            )
-          : []),
-      ]),
-    ];
-    return dates.sort();
-  }, [interviews, availabilities]);
+  const distinctDates = interviews.map((day) => day.interview_date).sort();
 
   const timeSlots = generateTimeSlots(9, 20);
 

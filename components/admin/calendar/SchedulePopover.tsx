@@ -61,7 +61,7 @@ export default function SchedulePopover(props: SchedulePopoverProps) {
           {props.userAvailabilities.length > 0 ? (
             <>
               <p className="mb-4">Brothers available in this timeslot:</p>
-              <form action={SubmitInterview} method="post" ref={formRef}>
+              <form action={SubmitInterview} ref={formRef}>
                 {/* Hidden inputs to pass along additional metadata */}
                 <input type="hidden" name="slot" value={props.slot} />
                 <input type="hidden" name="rusheeId" value={props.rusheeId} />

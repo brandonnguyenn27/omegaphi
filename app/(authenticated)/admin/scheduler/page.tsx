@@ -7,6 +7,7 @@ import {
 
 export default async function AdminCalendarPage() {
   const supabase = await createClient();
+
   const { data: interviews, error } = await supabase
     .from("interview_days")
     .select("*")
