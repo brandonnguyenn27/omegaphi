@@ -23,7 +23,14 @@ interface SchedulePopoverProps {
   rusheeId: string;
 }
 
-export default function SchedulePopover(props: SchedulePopoverProps) {
+export default function SchedulePopover({
+  rusheeAvailabilities,
+  userAvailabilities,
+  isAvailable,
+  slot,
+  rusheeId,
+}: SchedulePopoverProps) {
+  console.log(userAvailabilities);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (selectedUsers.length !== 2) {
       event.preventDefault();
@@ -37,13 +44,13 @@ export default function SchedulePopover(props: SchedulePopoverProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [error, setError] = useState("");
-  const handleCheckboxChange = (id: string, checked: boolean) => {
+  const handleCheckboxChange = (user_id: string, checked: boolean) => {
     if (checked) {
       if (selectedUsers.length < 2) {
-        setSelectedUsers((prev) => [...prev, id]);
+        setSelectedUsers((prev) => [...prev, user_id]);
       }
     } else {
-      setSelectedUsers((prev) => prev.filter((uid) => uid !== id));
+      setSelectedUsers((prev) => prev.filter((uid) => uid !== user_id));
     }
   };
 
@@ -52,19 +59,19 @@ export default function SchedulePopover(props: SchedulePopoverProps) {
       <Popover>
         <PopoverTrigger asChild>
           <div
-            key={`${props.rusheeId}-${props.slot}`}
+            key={`${rusheeId}-${slot}`}
             className="border-b border-r border-gray-300 h-12 flex items-center justify-center text-xs transition-colors duration-200 bg-red-500 text-white hover:bg-red-600 cursor-pointer"
           ></div>
         </PopoverTrigger>
         <PopoverContent>
           <h3 className="font-semibold text-lg mb-2">Time Slot Details</h3>
-          {props.userAvailabilities.length > 0 ? (
+          {userAvailabilities.length > 0 ? (
             <>
               <p className="mb-4">Brothers available in this timeslot:</p>
               <form action={SubmitInterview} ref={formRef}>
                 {/* Hidden inputs to pass along additional metadata */}
-                <input type="hidden" name="slot" value={props.slot} />
-                <input type="hidden" name="rusheeId" value={props.rusheeId} />
+                <input type="hidden" name="slot" value={slot} />
+                <input type="hidden" name="rusheeId" value={rusheeId} />
                 <input
                   type="hidden"
                   name="selectedUsers"
@@ -72,8 +79,8 @@ export default function SchedulePopover(props: SchedulePopoverProps) {
                 />
 
                 <div>
-                  {props.userAvailabilities.map((ua) => {
-                    const isChecked = selectedUsers.includes(ua.id);
+                  {userAvailabilities.map((ua) => {
+                    const isChecked = selectedUsers.includes(ua.user_id);
                     // Disable unchecked checkboxes when two are already selected.
                     const isDisabled = !isChecked && selectedUsers.length >= 2;
                     return (
@@ -82,18 +89,18 @@ export default function SchedulePopover(props: SchedulePopoverProps) {
                         className="flex items-center space-x-2 mb-2"
                       >
                         <Checkbox
-                          id={`user-${ua.id}`}
+                          id={`user-${ua.user_id}`}
                           checked={isChecked}
                           disabled={isDisabled}
                           onCheckedChange={(checked) =>
                             handleCheckboxChange(
-                              ua.id,
+                              ua.user_id,
                               typeof checked === "boolean" ? checked : false
                             )
                           }
                         />
                         <label
-                          htmlFor={`user-${ua.id}`}
+                          htmlFor={`user-${ua.user_id}`}
                           className={isDisabled ? "text-gray-400" : ""}
                         >
                           {ua.profiles.first_name} {ua.profiles.last_name}
