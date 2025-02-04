@@ -82,3 +82,24 @@ export type AvailabilityExtended = {
     last_name: string;
   };
 };
+
+export interface RusheeAvailabilityScheduler {
+  id: string;
+  start_time: string;
+  end_time: string;
+  rushees: {
+    first_name: string;
+    last_name: string;
+  };
+}
+
+export interface UserAvailabilityScheduler {
+  id: string;
+  user_id: string;
+  start_time: string;
+  end_time: string;
+  profiles: {
+    first_name: string;
+    last_name: string;
+  };
+}
