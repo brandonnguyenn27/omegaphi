@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
   UserAvailabilityScheduler,
   RusheeAvailabilityScheduler,
+  InterviewDay,
 } from "@/types/admin/types";
 import { Button } from "@/components/ui/button";
 
@@ -19,18 +20,18 @@ interface SchedulePopoverProps {
   rusheeAvailabilities: RusheeAvailabilityScheduler[];
   userAvailabilities: UserAvailabilityScheduler[];
   isAvailable: boolean;
-  slot: string;
+  slot: Date;
   rusheeId: string;
+  interviewDay: InterviewDay;
 }
 
 export default function SchedulePopover({
-  rusheeAvailabilities,
   userAvailabilities,
-  isAvailable,
+
   slot,
   rusheeId,
+  interviewDay,
 }: SchedulePopoverProps) {
-  console.log(userAvailabilities);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (selectedUsers.length !== 2) {
       event.preventDefault();
@@ -70,8 +71,13 @@ export default function SchedulePopover({
               <p className="mb-4">Brothers available in this timeslot:</p>
               <form action={SubmitInterview} ref={formRef}>
                 {/* Hidden inputs to pass along additional metadata */}
-                <input type="hidden" name="slot" value={slot} />
+                <input type="hidden" name="slot" value={slot.toISOString()} />
                 <input type="hidden" name="rusheeId" value={rusheeId} />
+                <input
+                  type="hidden"
+                  name="interviewDay"
+                  value={interviewDay.id}
+                />
                 <input
                   type="hidden"
                   name="selectedUsers"

@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import {
   UserAvailabilityScheduler,
   RusheeAvailabilityScheduler,
+  InterviewDay,
 } from "@/types/admin/types";
 import SchedulePopover from "./SchedulePopover";
 
@@ -11,8 +12,9 @@ interface TimeSlotCellProps {
   isAvailable: boolean;
   rusheeAvailabilities: RusheeAvailabilityScheduler[];
   userAvailabilities: UserAvailabilityScheduler[];
-  slot: string;
+  slot: Date;
   rusheeId: string;
+  interviewDay: InterviewDay;
 }
 
 const TimeSlotCell: React.FC<TimeSlotCellProps> = ({
@@ -21,6 +23,7 @@ const TimeSlotCell: React.FC<TimeSlotCellProps> = ({
   userAvailabilities,
   slot,
   rusheeId,
+  interviewDay,
 }) => {
   const title = isAvailable
     ? rusheeAvailabilities
@@ -42,6 +45,7 @@ const TimeSlotCell: React.FC<TimeSlotCellProps> = ({
         isAvailable={isAvailable}
         slot={slot}
         rusheeId={rusheeId}
+        interviewDay={interviewDay}
       />
     );
   }

@@ -8,6 +8,13 @@ export function formatDate(dateString: string): string {
   return date.toLocaleDateString("en-US", options);
 }
 
+export const padTime = (time: string) => {
+  const [hours, minutes] = time.split(":").map(Number);
+  const paddedHours = hours < 10 ? `0${hours}` : `${hours}`;
+  const paddedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+  return `${paddedHours}:${paddedMinutes}`;
+};
+
 export const formatTime = (timeStr: string | null | undefined) => {
   if (!timeStr) return "";
 

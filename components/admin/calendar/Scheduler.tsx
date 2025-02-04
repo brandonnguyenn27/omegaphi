@@ -1,3 +1,4 @@
+//TODO: There is a problem that the time cells only render until -30 minutes. Although this is ok, it should be fixed. Not important though.
 import React from "react";
 import { format, addMinutes, parseISO } from "date-fns";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -9,6 +10,7 @@ import {
 } from "@/types/admin/types";
 import { formatDate } from "@/utils/helper";
 import TimeSlotCell from "./TimeSlotCell";
+import { padTime } from "@/utils/helper";
 
 function generateTimeSlots(startHour: number, endHour: number) {
   const slots = [];
@@ -24,12 +26,6 @@ function formatTimeSlotWithDateFns(timeSlot: string) {
   const tempDate = new Date(2025, 0, 1, +hour, +minute);
   return format(tempDate, "h:mm a");
 }
-const padTime = (time: string) => {
-  const [hours, minutes] = time.split(":").map(Number);
-  const paddedHours = hours < 10 ? `0${hours}` : `${hours}`;
-  const paddedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-  return `${paddedHours}:${paddedMinutes}`;
-};
 
 interface SchedulerProps {
   interviews: InterviewDay[];
@@ -44,7 +40,7 @@ export default function Scheduler({
 }: SchedulerProps) {
   const distinctDates = interviews.map((day) => day.interview_date).sort();
 
-  const timeSlots = generateTimeSlots(9, 20);
+  const timeSlots = generateTimeSlots(9, 21);
 
   return (
     <div className="p-4">
@@ -143,7 +139,12 @@ export default function Scheduler({
                             isAvailable={isAvailable}
                             rusheeAvailabilities={rusheeAvailabilities}
                             userAvailabilities={userAvailabilitiesForSlot}
-                            slot={slot}
+                            slot={slotStart}
+                            interviewDay={
+                              interviews.find(
+                                (interview) => interview.interview_date === date
+                              ) as InterviewDay
+                            }
                             rusheeId={rushee.id}
                           />
                         );
