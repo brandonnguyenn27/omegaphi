@@ -11,6 +11,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { formatDate } from "@/utils/helper";
 import { Button } from "@/components/ui/button";
 import UserAvailabilityForm from "./InterviewAvailabilityForm";
 
@@ -25,6 +26,13 @@ export default function AddUserAvailabilityModal({
 }: AddUserAvailabilityModalProps) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
+
+  //hardcoded times, fix later
+  const times = [
+    ["9:00 AM", "2:00 PM"],
+    ["9:00 AM", "2:00 PM"],
+    ["12:00 PM", "8:00 PM"],
+  ];
 
   async function handleSubmit(formData: FormData) {
     const startTime = formData.get("start_time") as string;
@@ -64,7 +72,15 @@ export default function AddUserAvailabilityModal({
         <DialogHeader>
           <DialogTitle>Add Availability</DialogTitle>
           <DialogDescription>
-            Add your availability for interviews.
+            Dates:
+            <div className="flex flex-col">
+              {interview_dates.map((date) => (
+                <span key={date} className="text-gray-600">
+                  {formatDate(date)} @ {times[interview_dates.indexOf(date)][0]}{" "}
+                  - {times[interview_dates.indexOf(date)][1]}
+                </span>
+              ))}
+            </div>
           </DialogDescription>
         </DialogHeader>
         {error && <div className="text-red-500 mb-4">{error}</div>}
