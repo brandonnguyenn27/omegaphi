@@ -11,7 +11,7 @@ export default async function InterviewPage() {
 
   const { data: dates, error: datesError } = await supabase
     .from("interview_days")
-    .select("id, interview_date")
+    .select("*")
     .order("interview_date");
   if (datesError) {
     console.error(datesError);
@@ -40,7 +40,7 @@ export default async function InterviewPage() {
         <h1 className="text-2xl font-bold mr-8">Interviews</h1>
         <AddUserAvailabilityModal
           userId={userId || ""}
-          interview_dates={dates?.map((date) => date.interview_date) || []}
+          interview_dates={dates || []}
         />
       </div>
       <div className="flex justify-center items-center w-full">
