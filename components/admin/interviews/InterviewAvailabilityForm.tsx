@@ -20,6 +20,8 @@ export default function UserAvailabilityForm({
   submitAction,
   interview_dates,
 }: UserAvailabilityFormProps) {
+  const defaultStart = "09:00";
+  const defaultEnd = "20:00";
   return (
     <form action={submitAction} className="space-y-4">
       <div>
@@ -47,6 +49,7 @@ export default function UserAvailabilityForm({
           type="time"
           name="start_time"
           className="w-full p-2 border rounded"
+          defaultValue={defaultStart}
           required
         />
       </div>
@@ -59,6 +62,7 @@ export default function UserAvailabilityForm({
           type="time"
           name="end_time"
           className="w-full p-2 border rounded"
+          defaultValue={defaultEnd}
           required
         />
         <Button className="mt-4" type="submit">
