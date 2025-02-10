@@ -6,6 +6,7 @@ import {
   AvailabilityExtended,
   UserAvailabilityExtended,
   Rushee,
+  Interview,
 } from "@/types/admin/types";
 import { formatDate } from "@/utils/helper";
 import TimeSlotCell from "./TimeSlotCell";
@@ -28,18 +29,20 @@ function formatTimeSlotWithDateFns(timeSlot: string) {
 }
 
 interface SchedulerProps {
-  interviews: InterviewDay[];
+  interviewDays: InterviewDay[];
   availabilities: AvailabilityExtended[];
   userAvailabilities: UserAvailabilityExtended[];
+  interviews: Interview[];
 }
 
 export default async function Scheduler({
-  interviews,
+  interviewDays,
   availabilities,
   userAvailabilities,
+  interviews,
 }: SchedulerProps) {
   const supabase = await createClient();
-  const distinctDates = interviews.map((day) => day.interview_date).sort();
+  const distinctDates = interviewDays.map((day) => day.interview_date).sort();
 
   const timeSlots = generateTimeSlots(9, 21);
 
@@ -137,20 +140,32 @@ export default async function Scheduler({
                       </div>
                       {timeSlots.map((slot) => {
                         const paddedSlot = padTime(slot);
-                        const slotStart = parseISO(`${date}T${paddedSlot}:00Z`);
-
+                        const slotStart = new Date(`${date}T${paddedSlot}:00Z`);
                         const slotEnd = addMinutes(slotStart, 30);
+
+                        // Compare interviews by converting both to ISO strings
+                        const interviewForSlot = interviews.find((iv) => {
+                          const interviewTime = parseISO(
+                            iv.start_time
+                          ).getTime();
+                          return (
+                            iv.rushee_id === rushee.id &&
+                            Math.abs(interviewTime - slotStart.getTime()) < 1000
+                          );
+                        });
+
+                        const scheduled = Boolean(interviewForSlot);
 
                         const rusheeAvailabilities =
                           availabilitiesForDay.filter((a) => {
                             if (a.rushee_id !== rushee.id) return false;
-
                             const availStart = new Date(a.start_time);
                             const availEnd = new Date(a.end_time);
-
-                            return availStart < slotEnd && availEnd > slotStart;
+                            return (
+                              availStart.getTime() <= slotStart.getTime() &&
+                              availEnd.getTime() >= slotEnd.getTime()
+                            );
                           });
-
                         const isAvailable = rusheeAvailabilities.length > 0;
                         const userAvailabilitiesForSlot =
                           userAvailabilitiesForDay.filter((ua) => {
@@ -158,15 +173,17 @@ export default async function Scheduler({
                             const userEnd = new Date(ua.end_time);
                             return userStart < slotEnd && userEnd > slotStart;
                           });
+
                         return (
                           <TimeSlotCell
                             key={`${rushee.id}-${slot}`}
                             isAvailable={isAvailable}
                             rusheeAvailabilities={rusheeAvailabilities}
                             userAvailabilities={userAvailabilitiesForSlot}
+                            scheduled={scheduled}
                             slot={slotStart}
                             interviewDay={
-                              interviews.find(
+                              interviewDays.find(
                                 (interview) => interview.interview_date === date
                               ) as InterviewDay
                             }

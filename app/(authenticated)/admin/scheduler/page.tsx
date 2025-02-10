@@ -3,6 +3,7 @@ import Scheduler from "@/components/admin/calendar/Scheduler";
 import {
   AvailabilityExtended,
   UserAvailabilityExtended,
+  Interview,
 } from "@/types/admin/types";
 
 export default async function AdminCalendarPage() {
@@ -38,6 +39,7 @@ export default async function AdminCalendarPage() {
     (a) => ({
       ...a,
       rushees: Array.isArray(a.rushees) ? a.rushees[0] : a.rushees,
+      is_scheduled: false, // or set this based on your logic
     })
   );
 
@@ -61,13 +63,33 @@ export default async function AdminCalendarPage() {
     profiles: Array.isArray(ua.profiles) ? ua.profiles[0] : ua.profiles,
   }));
 
+  const { data: rawInterviews, error: interviewsError } = await supabase
+    .from("interviews")
+    .select("*");
+  if (interviewsError) {
+    console.error(interviewsError);
+  }
+
+  const uniqueInterviews: Interview[] = Object.values(
+    (rawInterviews || []).reduce(
+      (acc: Record<string, Interview>, iv: Interview) => {
+        if (!acc[iv.rushee_id]) {
+          acc[iv.rushee_id] = iv;
+        }
+        return acc;
+      },
+      {}
+    )
+  );
+
   return (
     <section className="p-4">
       <h1 className="text-xl font-semibold mb-4">Interview Scheduler</h1>
       <Scheduler
-        interviews={interviews || []}
+        interviewDays={interviews || []}
         availabilities={availabilities || []}
         userAvailabilities={userAvailabilities || []}
+        interviews={uniqueInterviews || []}
       />
     </section>
   );

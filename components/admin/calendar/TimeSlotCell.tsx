@@ -15,6 +15,7 @@ interface TimeSlotCellProps {
   slot: Date;
   rusheeId: string;
   interviewDay: InterviewDay;
+  scheduled: boolean;
 }
 
 const TimeSlotCell: React.FC<TimeSlotCellProps> = ({
@@ -24,6 +25,7 @@ const TimeSlotCell: React.FC<TimeSlotCellProps> = ({
   slot,
   rusheeId,
   interviewDay,
+  scheduled,
 }) => {
   const title = isAvailable
     ? rusheeAvailabilities
@@ -37,23 +39,17 @@ const TimeSlotCell: React.FC<TimeSlotCellProps> = ({
         .join("\n")
     : "";
 
-  if (isAvailable) {
-    return (
-      <SchedulePopover
-        rusheeAvailabilities={rusheeAvailabilities}
-        userAvailabilities={userAvailabilities}
-        isAvailable={isAvailable}
-        slot={slot}
-        rusheeId={rusheeId}
-        interviewDay={interviewDay}
-      />
-    );
+  let bgColor = "bg-gray-100";
+  if (scheduled) {
+    bgColor = "bg-green-500";
+  } else if (isAvailable) {
+    bgColor = "bg-red-500 hover:bg-red-600";
   }
 
   return (
     <div
       key={`${rusheeId}-${slot}`}
-      className="border-b border-r border-gray-300 h-12 flex items-center justify-center text-xs bg-white hover:bg-gray-100 transition-colors duration-200"
+      className={`border-b border-r border-gray-300 h-12 flex items-center justify-center text-xs transition-colors duration-200 ${bgColor}`}
       title={title}
     />
   );

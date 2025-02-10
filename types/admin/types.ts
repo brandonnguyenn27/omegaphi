@@ -96,6 +96,19 @@ export interface RusheeAvailabilityScheduler {
   };
 }
 
+export interface Interview {
+  id: string;
+  user_id: string;
+  interviewee_name: string;
+  partner_name: string | null;
+  start_time: string; // ISO string representing timestamp with time zone
+  end_time: string; // ISO string representing timestamp with time zone
+  created_at: string | null;
+  updated_at: string | null;
+  interview_day_id: string | null;
+  rushee_id: string;
+}
+
 export interface UserAvailabilityScheduler {
   id: string;
   user_id: string;
