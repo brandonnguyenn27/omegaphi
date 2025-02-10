@@ -25,6 +25,7 @@ export type Rushee = {
   last_name: string;
   email?: string;
   phone?: string;
+  is_scheduled?: boolean;
 };
 
 export type RusheeAvailability = {
@@ -34,6 +35,7 @@ export type RusheeAvailability = {
   end_time: string;
   created_at?: string;
   updated_at?: string;
+  booked: boolean;
 };
 
 export type UserAvailability = {
@@ -77,6 +79,7 @@ export type AvailabilityExtended = {
   end_time: string;
   created_at: string;
   updated_at: string;
+  is_scheduled: boolean;
   rushees: {
     first_name: string;
     last_name: string;

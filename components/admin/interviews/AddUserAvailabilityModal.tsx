@@ -29,6 +29,7 @@ export default function AddUserAvailabilityModal({
   const [error, setError] = useState("");
 
   async function handleSubmit(formData: FormData) {
+    // this function can be abstracted into the server action function.
     const startTime = formData.get("start_time") as string;
     const endTime = formData.get("end_time") as string;
     const date = formData.get("date") as string;

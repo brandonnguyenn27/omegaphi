@@ -3,6 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { Rushee } from "@/types/admin/types";
 import { addMinutes, parseISO } from "date-fns";
+import { revalidatePath } from "next/cache";
 
 export async function SubmitInterview(formData: FormData) {
   const supabase = await createClient();
@@ -82,6 +83,19 @@ export async function SubmitInterview(formData: FormData) {
     "At timeslot ",
     start_time
   );
+
+  const { error: markScheduledError } = await supabase
+    .from("rushees")
+    .update({
+      is_scheduled: true,
+    })
+    .eq("id", rusheeId);
+  if (markScheduledError) {
+    console.error("Error marking rushee as scheduled:", markScheduledError);
+    return;
+  }
+  console.log("Successfully marked rushee as scheduled", rushee.id);
+  revalidatePath("/admin/scheduler");
 
   return;
 }

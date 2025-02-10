@@ -1,4 +1,3 @@
-//TODO: There is a problem that the time cells only render until -30 minutes. Although this is ok, it should be fixed. Not important though.
 import React from "react";
 import { format, addMinutes, parseISO } from "date-fns";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -11,6 +10,7 @@ import {
 import { formatDate } from "@/utils/helper";
 import TimeSlotCell from "./TimeSlotCell";
 import { padTime } from "@/utils/helper";
+import { createClient } from "@/utils/supabase/server";
 
 function generateTimeSlots(startHour: number, endHour: number) {
   const slots = [];
@@ -33,14 +33,44 @@ interface SchedulerProps {
   userAvailabilities: UserAvailabilityExtended[];
 }
 
-export default function Scheduler({
+export default async function Scheduler({
   interviews,
   availabilities,
   userAvailabilities,
 }: SchedulerProps) {
+  const supabase = await createClient();
   const distinctDates = interviews.map((day) => day.interview_date).sort();
 
   const timeSlots = generateTimeSlots(9, 21);
+
+  const fetchRushees = async (date: string) => {
+    const availabilitiesForDay = (availabilities || []).filter(
+      (a) => format(parseISO(a.start_time), "yyyy-MM-dd") === date
+    );
+
+    const rusheeIds = Array.from(
+      new Set(availabilitiesForDay.map((a) => a.rushee_id))
+    );
+
+    const { data: rushees, error } = await supabase
+      .from("rushees")
+      .select("*")
+      .in("id", rusheeIds);
+
+    if (error) {
+      console.error("Error fetching rushees:", error);
+      return [];
+    }
+
+    return rushees;
+  };
+
+  const rusheesByDate = await Promise.all(
+    distinctDates.map(async (date) => {
+      const rushees = await fetchRushees(date);
+      return { date, rushees };
+    })
+  );
 
   return (
     <div className="p-4">
@@ -59,21 +89,13 @@ export default function Scheduler({
           })}
         </TabsList>
 
-        {distinctDates.map((date) => {
+        {rusheesByDate.map(({ date, rushees }) => {
           const availabilitiesForDay = (availabilities || []).filter(
             (a) => format(parseISO(a.start_time), "yyyy-MM-dd") === date
           );
 
           const userAvailabilitiesForDay = (userAvailabilities || []).filter(
             (ua) => format(parseISO(ua.start_time), "yyyy-MM-dd") === date
-          );
-          const distinctRushees: Rushee[] = Array.from(
-            new Map(
-              availabilitiesForDay.map((a) => [
-                a.rushee_id,
-                { id: a.rushee_id, ...a.rushees },
-              ])
-            ).values()
           );
 
           return (
@@ -95,7 +117,6 @@ export default function Scheduler({
                       height: "40px",
                     }}
                   ></div>
-
                   {timeSlots.map((slot) => (
                     <div
                       key={slot}
@@ -105,9 +126,13 @@ export default function Scheduler({
                     </div>
                   ))}
 
-                  {distinctRushees.map((rushee: Rushee) => (
+                  {rushees.map((rushee: Rushee) => (
                     <React.Fragment key={rushee.id}>
-                      <div className="sticky left-0 bg-white border-r border-b border-gray-300 p-2 text-sm font-medium rounded-l-md z-20">
+                      <div
+                        className={`sticky left-0 bg-white border-r border-b border-gray-300 p-2 text-sm font-medium rounded-l-md z-20 ${
+                          rushee.is_scheduled ? "text-green-500" : ""
+                        }`}
+                      >
                         {rushee.first_name} {rushee.last_name}
                       </div>
                       {timeSlots.map((slot) => {

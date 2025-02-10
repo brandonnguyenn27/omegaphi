@@ -38,7 +38,6 @@ export default function SchedulePopover({
       setError("Please select exactly 2 users.");
     } else {
       setError("");
-      // Note: When validation passes, the form's action will trigger the server action.
     }
   };
 
