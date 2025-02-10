@@ -4,6 +4,7 @@ import { parseISO, addMinutes, format } from "date-fns";
 import { InterviewDay, UserAvailabilityExtended } from "@/types/admin/types";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { padTime } from "@/utils/helper";
+import { Profile } from "@/types/admin/types";
 
 // i should abstract this into a helper function
 function generateTimeSlots(startHour: number, endHour: number) {
@@ -48,16 +49,18 @@ export default async function UserAvailability({
     console.error(error);
   }
   // Assume profilesData is an array of objects with first_name and last_name
-  const profiles = (profilesData || []).sort((a: any, b: any) => {
-    const nameA = (a.first_name || "").toLowerCase();
-    const nameB = (b.first_name || "").toLowerCase();
-    if (nameA === nameB) {
-      return (a.last_name || "")
-        .toLowerCase()
-        .localeCompare((b.last_name || "").toLowerCase());
+  const profiles: Profile[] = ((profilesData as Profile[]) || []).sort(
+    (a: Profile, b: Profile) => {
+      const nameA = (a.first_name || "").toLowerCase();
+      const nameB = (b.first_name || "").toLowerCase();
+      if (nameA === nameB) {
+        return (a.last_name || "")
+          .toLowerCase()
+          .localeCompare((b.last_name || "").toLowerCase());
+      }
+      return nameA.localeCompare(nameB);
     }
-    return nameA.localeCompare(nameB);
-  });
+  );
 
   return (
     <div className="p-4">
@@ -109,7 +112,7 @@ export default async function UserAvailability({
                     </div>
                   ))}
 
-                  {profiles.map((profile: any) => {
+                  {profiles.map((profile: Profile) => {
                     const userAvailabilitiesForDay =
                       availabilitiesForDay.filter(
                         (ua) => ua.user_id === profile.id

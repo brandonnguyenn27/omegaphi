@@ -1,6 +1,5 @@
 import UserAvailability from "@/components/availability/UserAvailabilityGrid";
 import { createClient } from "@/utils/supabase/server";
-import { InterviewDay, UserAvailabilityExtended } from "@/types/admin/types";
 
 export default async function AvailabilityPage() {
   const supabase = await createClient();

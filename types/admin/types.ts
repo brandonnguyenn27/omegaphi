@@ -119,3 +119,12 @@ export interface UserAvailabilityScheduler {
     last_name: string;
   };
 }
+
+export interface Profile {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  avatar_url: string | null;
+  role: string | null;
+  created_at: string | null;
+}
