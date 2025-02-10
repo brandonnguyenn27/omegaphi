@@ -42,8 +42,27 @@ const TimeSlotCell: React.FC<TimeSlotCellProps> = ({
   let bgColor = "bg-gray-100";
   if (scheduled) {
     bgColor = "bg-green-500";
-  } else if (isAvailable) {
-    bgColor = "bg-red-500 hover:bg-red-600";
+  }
+  if (scheduled) {
+    return (
+      <div
+        key={`${rusheeId}-${slot}`}
+        className={`border-b border-r border-gray-300 h-12 flex items-center justify-center text-xs transition-colors duration-200 ${bgColor}`}
+        title={title}
+      ></div>
+    );
+  }
+  if (isAvailable) {
+    return (
+      <SchedulePopover
+        rusheeAvailabilities={rusheeAvailabilities}
+        userAvailabilities={userAvailabilities}
+        isAvailable={isAvailable}
+        slot={slot}
+        rusheeId={rusheeId}
+        interviewDay={interviewDay}
+      />
+    );
   }
 
   return (
