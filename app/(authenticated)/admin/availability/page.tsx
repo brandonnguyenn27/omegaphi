@@ -1,4 +1,4 @@
-import UserAvailability from "@/components/availbility/UserAvailabilityGrid";
+import UserAvailability from "@/components/availability/UserAvailabilityGrid";
 import { createClient } from "@/utils/supabase/server";
 import { InterviewDay, UserAvailabilityExtended } from "@/types/admin/types";
 

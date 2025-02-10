@@ -45,6 +45,11 @@ const items: SidebarItem[] = [
         roles: ["admin"],
       },
       {
+        title: "Availability",
+        url: "/admin/availability",
+        roles: ["admin"],
+      },
+      {
         title: "Rushees",
         url: "/admin/rushees",
         roles: ["admin"],
