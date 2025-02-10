@@ -56,6 +56,7 @@ export async function SubmitInterview(formData: FormData) {
       start_time: start_time.toISOString(),
       end_time: end_time.toISOString(),
       interview_day_id: interviewDayId,
+      rushee_id: rusheeId,
     },
     {
       user_id: brother2.id,
@@ -64,6 +65,7 @@ export async function SubmitInterview(formData: FormData) {
       start_time: start_time.toISOString(),
       end_time: end_time.toISOString(),
       interview_day_id: interviewDayId,
+      rushee_id: rusheeId,
     },
   ];
 
