@@ -46,31 +46,18 @@ export default async function Scheduler({
 
   const timeSlots = generateTimeSlots(9, 21);
 
-  const fetchRushees = async (date: string) => {
-    const availabilitiesForDay = (availabilities || []).filter(
-      (a) => format(parseISO(a.start_time), "yyyy-MM-dd") === date
-    );
-
-    const rusheeIds = Array.from(
-      new Set(availabilitiesForDay.map((a) => a.rushee_id))
-    );
-
-    const { data: rushees, error } = await supabase
-      .from("rushees")
-      .select("*")
-      .in("id", rusheeIds);
-
+  const fetchRushees = async () => {
+    const { data: rushees, error } = await supabase.from("rushees").select("*");
     if (error) {
       console.error("Error fetching rushees:", error);
       return [];
     }
-
     return rushees;
   };
 
   const rusheesByDate = await Promise.all(
     distinctDates.map(async (date) => {
-      const rushees = await fetchRushees(date);
+      const rushees = await fetchRushees();
       return { date, rushees };
     })
   );
@@ -132,7 +119,7 @@ export default async function Scheduler({
                   {rushees.map((rushee: Rushee) => (
                     <React.Fragment key={rushee.id}>
                       <div
-                        className={`sticky left-0 bg-white border-r border-b border-gray-300 p-2 text-sm font-medium rounded-l-md z-20 ${
+                        className={`sticky left-0 bg-white border-r border-b border-gray-300 p-2 text-sm font-medium  z-20 ${
                           rushee.is_scheduled ? "text-green-500" : ""
                         }`}
                       >
