@@ -119,7 +119,7 @@ export default async function UserAvailability({
                       );
                     return (
                       <React.Fragment key={profile.id}>
-                        <div className="sticky left-0 bg-white border-r border-b border-gray-300 p-2 text-sm font-medium rounded-l-md z-20">
+                        <div className="sticky left-0 bg-white border-r border-b border-gray-300 p-2 text-sm font-medium z-20">
                           {profile.first_name} {profile.last_name}
                         </div>
 
